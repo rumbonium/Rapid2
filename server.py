@@ -13,7 +13,7 @@ app = Flask(__name__)
 @app.route('/')
 # ‘/’ URL is bound with hello_world() function.
 def hello_world():
-    return send_file("part1.html")
+    return send_file("index.html")
  
 @app.route('/<path:path>')
 def send_js(path):
