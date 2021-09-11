@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head> 
     <meta charset="UTF-8" />
-    <title>Making your first Phaser 3 Game - Part 1</title>
+    <title>Joust Clone</title>
     <script src="./js/phaser.js"></script>
     <style type="text/css">
         body {
@@ -58,12 +58,14 @@
 
         platforms.create(400, 568, 'ground').setScale(2).refreshBody();
         platforms.create(600, 400, 'ground');
-        platforms.create(50, 250, 'ground');
+        platforms.create(20, 400, 'ground');
+        platforms.create(50, 220, 'ground');
         platforms.create(750, 220, 'ground');
+        platforms.create(400, -32, 'ground').setScale(2).refreshBody();
 
         player = this.physics.add.sprite(100, 450, 'dude');
-        player.setBounce(0.2);
-        player.setCollideWorldBounds(true);
+        player.setBounce(1, 0.2);
+        //player.setCollideWorldBounds(true);
         
         this.anims.create({
             key: 'left',
@@ -87,7 +89,7 @@
 
         stars = this.physics.add.group({
             key: 'star',
-            repeat: 1,
+            repeat: 11,
             setXY: {x: 12, y: 0, stepX: 70}
         });
 
@@ -119,22 +121,33 @@
         }
         else{
             if(cursors.left.isDown){
-                player.setVelocityX(-160);
+                player.setVelocityX(player.body.velocity.x - 15);
                 player.anims.play('left', true);
             }
             else if(cursors.right.isDown){
-                player.setVelocityX(160);
+                player.setVelocityX(player.body.velocity.x + 15);
                 player.anims.play('right', true);
             }
             else{
-                player.setVelocityX(0);
+                //player.setVelocityX(0);
                 player.anims.play('turn');
             }
 
-            if(cursors.up.isDown && player.body.touching.down){
-                player.setVelocityY(-330);
+            if(player.body.velocity.x > 100){
+                player.body.velocity.x = 100;
+            }
+            if(player.body.velocity.x < -100){
+                player.body.velocity.x = -100
+            }
+
+            if(cursors.up.isDown ){ //&& player.body.touching.down
+                player.setVelocityY(player.body.velocity.y - 15);
             }
         }
+
+        this.physics.world.wrap(player, 0);
+        this.physics.world.wrap(bombs, 0);
+        this.physics.world.wrap(platforms, 0);
 
     }
 
@@ -151,7 +164,7 @@
             var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
             var bomb = bombs.create(x, 16, 'bomb');
             bomb.setBounce(1);
-            bomb.setCollideWorldBounds(true);
+            //bomb.setCollideWorldBounds(true);
             bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
         }
     }
