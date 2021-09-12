@@ -24,3 +24,18 @@ function hitBomb(player, bomb){
 	scoreText.setText('Score: ' + score + '\nHit R to restart');
 }
 
+function hitEnemy(player, enemy) {
+	if (enemy.getCenter().y > player.getCenter().y) {
+		this.physics.pause();
+		player.setTint(0xff0000);
+		player.anims.play('turn');
+		gameOver = true;
+		scoreText.setText('Score: ' + score + '\nHit R to restart');
+	}
+	else {
+		enemy.destroy();
+		
+		// TODO: Create an egg, give it velocity
+	}
+	}
+}
