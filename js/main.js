@@ -16,12 +16,18 @@ var config = {
 	}
 };
 
+var mainScene;
+
 var player;
+let pLogic = new playerLogic();
 var platforms;
+var lava;
 var stars;
 var score = 0;
 var scoreText;
 var bombs;
+var enemies;
+var eggs;
 var gameOver = false;
 var game = new Phaser.Game(config);
 
@@ -36,20 +42,22 @@ function preload ()
 
 function create ()
 {
+	mainScene = this;
+	
 	this.add.image(0, 0, 'sky').setOrigin(0, 0);
 
 	platforms = this.physics.add.staticGroup();
 
-	platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+	platforms.create(400, 568, 'ground').setScale(1, 2).refreshBody();
 	platforms.create(600, 400, 'ground');
 	platforms.create(20, 400, 'ground');
 	platforms.create(50, 220, 'ground');
 	platforms.create(750, 220, 'ground');
-	platforms.create(400, -32, 'ground').setScale(2).refreshBody();
+	platforms.create(400, -8, 'ground').setScale(2, 0.5).refreshBody();
 
-	player = this.physics.add.sprite(100, 450, 'dude');
-	player.setBounce(1, 0.2);
-	//player.setCollideWorldBounds(true);
+	player = this.physics.add.sprite(PLAYER_STARTING_X, PLAYER_STARTING_Y, 'dude');
+	player.setBounce(PLAYER_HORIZONTAL_BOUNCE, PLAYER_VERTICAL_BOUNCE);
+	player.setGravity(0, PLAYER_GRAVITY);
 	
 	this.anims.create({
 		key: 'left',
@@ -71,24 +79,34 @@ function create ()
 		repeat: -1
 	});
 
-	stars = this.physics.add.group({
-		key: 'star',
-		repeat: 11,
-		setXY: {x: 12, y: 0, stepX: 70}
-	});
+	eggs = this.physics.add.group();
+	
+	enemies = this.physics.add.group();
+	let e1 = new Rider(0, 100, 1);
+	let e2 = new Rider(100, 100, 1);
+	enemies.add(e1, true);
+	enemies.add(e2, true);
+	
+	enemies.children.iterate(function(child){
+		child.setTintFill(0xff0000);
+	})
 
-	stars.children.iterate(function(child){
-		child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-	});
+	lava = this.physics.add.staticGroup();
+	lava.create(100, 575, 'ground').setScale(0.5, 1.6).refreshBody();
+	lava.create(700, 575, 'ground').setScale(0.5, 1.6).refreshBody();
+	lava.children.iterate(function(child){
+		child.setTintFill(0xff0000);
+	})
 
-	bombs = this.physics.add.group();
-
-
+	this.physics.add.collider(enemies, platforms);
+	this.physics.add.collider(eggs, platforms);
 	this.physics.add.collider(player, platforms);
-	this.physics.add.collider(stars, platforms);
-	this.physics.add.overlap(player, stars, collectStar, null, this);
-	this.physics.add.collider(bombs, platforms);
-	this.physics.add.collider(player, bombs, hitBomb, null, this);
+	this.physics.add.collider(enemies, lava, destroy, null, this);
+	this.physics.add.collider(eggs, lava, destroy, null, this);
+	this.physics.add.collider(player, lava, hitBomb, null, this);
+	
+	this.physics.add.overlap(player, enemies, hitEnemy, null, this);
+	//this.physics.add.overlap(eggs, player, destroy, null, this);
 
 	scoreText = this.add.text(16, 16, 'Score: 0', {fontSize: '32px', fill: '#000'});
 
@@ -104,33 +122,14 @@ function update ()
 		score = 0;
 	}
 	else{
-		if(cursors.left.isDown){
-			player.setVelocityX(player.body.velocity.x - 15);
-			player.anims.play('left', true);
-		}
-		else if(cursors.right.isDown){
-			player.setVelocityX(player.body.velocity.x + 15);
-			player.anims.play('right', true);
-		}
-		else{
-			//player.setVelocityX(0);
-			player.anims.play('turn');
-		}
-
-		if(player.body.velocity.x > 100){
-			player.body.velocity.x = 100;
-		}
-		if(player.body.velocity.x < -100){
-			player.body.velocity.x = -100
-		}
-
-		if(cursors.up.isDown ){ //&& player.body.touching.down
-			player.setVelocityY(player.body.velocity.y - 15);
-		}
+		pLogic.playerUpdate(player, cursors);
 	}
+	
+	enemies.children.iterate(enemy => enemy.update(player));
+	eggs.children.iterate(egg => egg.update(player));
 
 	this.physics.world.wrap(player, 0);
-	this.physics.world.wrap(bombs, 0);
-	this.physics.world.wrap(platforms, 0);
+	this.physics.world.wrap(enemies, 0);
+	this.physics.world.wrap(eggs, 0);
 
 }
