@@ -7,14 +7,16 @@ function hitBomb(player, bomb){
 }
 
 function hitEnemy(player, enemy) {
-	if (enemy.getCenter().y < player.getCenter().y) {
+	let diff = player.getCenter().y - enemy.getCenter().y;
+	let direction = player.getCenter().x - enemy.getCenter().x;
+	if (diff > 100) {
 		this.physics.pause();
 		player.setTint(0xff0000);
 		player.anims.play('turn');
 		gameOver = true;
 		scoreText.setText('Score: ' + score + '\nHit R to restart');
 	}
-	else {
+	else if (diff < -100) {
 		//Create an egg, give it velocity
 		let egg = new Egg(enemy.getBottomCenter().x, enemy.getBottomCenter().y, 0);
 		eggs.add(egg, true);
@@ -22,6 +24,22 @@ function hitEnemy(player, enemy) {
 		egg.body.setBounce(1, 0.35);
 		
 		enemy.kill();
+	}
+	else {
+		// Player on right
+		if (direction > 0) {
+			player.setPosition(player.x + 5, player.y);
+			// TODO: Set the enemy's movement
+		}
+		// Player on left
+		else {
+			player.setPosition(player.x - 5, player.y);
+			// TODO: Set the enemy's movement
+		}
+		
+		
+		player.body.setVelocity(-player.body.velocity.x);
+		
 	}
 }
 
