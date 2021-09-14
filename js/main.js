@@ -28,6 +28,7 @@ var scoreText;
 var bombs;
 var enemies;
 var eggs;
+var eggCounter = 0;
 var gameOver = false;
 var game = new Phaser.Game(config);
 
@@ -82,14 +83,14 @@ function create ()
 	eggs = this.physics.add.group();
 	
 	enemies = this.physics.add.group();
-	let e1 = new Rider(0, 100, 1);
-	let e2 = new Rider(100, 100, 1);
-	enemies.add(e1, true);
-	enemies.add(e2, true);
-	
-	enemies.children.iterate(function(child){
-		child.setTintFill(0xff0000);
-	})
+	for(let i = 0; i < 5; i++){
+		let e1 = new Rider(250+(i*50), 500, 0 );
+		enemies.add(e1, true);
+	}
+	// let e1 = new Rider(0, 100, 0);
+	// let e2 = new Rider(100, 100, 2);
+	// enemies.add(e1, true);
+	// enemies.add(e2, true);
 
 	lava = this.physics.add.staticGroup();
 	lava.create(100, 575, 'ground').setScale(0.5, 1.6).refreshBody();

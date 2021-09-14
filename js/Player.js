@@ -1,7 +1,7 @@
 // Dependant on the 'phaser.js' library
 
-const PLAYER_STARTING_X = 400;
-const PLAYER_STARTING_Y = 450;
+const PLAYER_STARTING_X = 450;
+const PLAYER_STARTING_Y = 300;
 const PLAYER_GRAVITY = 100;
 const PLAYER_VERTICAL_BOUNCE = 0.2;
 const PLAYER_HORIZONTAL_BOUNCE = 1;
