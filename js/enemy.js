@@ -123,8 +123,6 @@ class Egg extends Phaser.GameObjects.Sprite {
 	}
 	
 	kill() {
-		score += EGG_SCORES[eggCounter];
-		eggCounter = (eggCounter >= 3) ? 3 : eggCounter + 1;
 		this.destroy();
 	}
 }

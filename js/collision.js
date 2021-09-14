@@ -57,6 +57,9 @@ function destroy(toDestroy, other) {
 
 
 function killEgg(player, egg) {
+	score += EGG_SCORES[eggCounter];
+	eggCounter = (eggCounter >= 3) ? 3 : eggCounter + 1;
+	scoreText.setText('Score: ' + score);
 	egg.kill();
 }
 
