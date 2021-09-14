@@ -107,9 +107,6 @@ function create ()
 	enemies.add(e1, true);
 	enemies.add(e2, true);
 	
-	enemies.children.iterate(function(child){
-		child.setTintFill(0xff0000);
-	})
 
 	lava = this.physics.add.staticGroup();
 	lava.create(100, 675, 'ground').setScale(0.5, 1.6).refreshBody();
