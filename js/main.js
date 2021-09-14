@@ -26,6 +26,7 @@ var lava;
 var stars;
 var score = 0;
 var scoreText;
+var livesText;
 var bombs;
 var enemies;
 var eggs;
@@ -132,7 +133,7 @@ function create ()
 	this.physics.add.overlap(player, eggs, killEgg, null, this);
 
 	scoreText = this.add.text(16, 16, 'Score: 0', {fontSize: '32px', fill: '#000'});
-
+	livesText = this.add.text(800 - 400, 16, 'Lives Remaining: ' + PLAYER_MAX_LIVES, {fontSize: '32px', fill: '#000'});
 }
 
 function update ()
@@ -145,6 +146,7 @@ function update ()
 	if(gameOver && rObj.isDown){
 		this.scene.restart();
 		score = 0;
+		pLogic.playerLives = PLAYER_MAX_LIVES;
 	}
 	else{
 		pLogic.playerUpdate(player, cursors);

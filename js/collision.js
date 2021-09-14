@@ -2,11 +2,7 @@
 const ENEMY_COLLISION_DEAD_ZONE_SIZE = 10;
 
 function hitLava(player, bomb){
-	this.physics.pause();
-	player.setTint(0xff0000);
-	player.anims.play('turn');
-	gameOver = true;
-	scoreText.setText('Score: ' + score + '\nHit R to restart');
+	playerDamage();
 }
 
 function hitEnemy(player, enemy) {
@@ -14,11 +10,7 @@ function hitEnemy(player, enemy) {
 	let diff = player.getCenter().y - enemy.getCenter().y;
 	let direction = player.getCenter().x - enemy.getCenter().x;
 	if (diff > ENEMY_COLLISION_DEAD_ZONE_SIZE) {
-		this.physics.pause();
-		player.setTint(0xff0000);
-		player.anims.play('turn');
-		gameOver = true;
-		scoreText.setText('Score: ' + score + '\nHit R to restart');
+		playerDamage();
 	}
 
 	else if (diff < -ENEMY_COLLISION_DEAD_ZONE_SIZE) {
@@ -63,3 +55,20 @@ function killEgg(player, egg) {
 	egg.kill();
 }
 
+function setGameOver(){
+	mainScene.physics.pause();
+	player.setTint(0xff0000);
+	player.anims.play('turn');
+	gameOver = true;
+	scoreText.setText('Score: ' + score + '\nHit R to restart');
+}
+
+function playerDamage(){
+	if(pLogic.decrementPlayerLives() <= 0){
+		setGameOver();
+	}
+	else{
+		player.setPosition(PLAYER_STARTING_X, PLAYER_STARTING_Y);
+		player.setVelocity(0);
+	}
+}
