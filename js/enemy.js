@@ -19,6 +19,8 @@ class Rider extends Phaser.GameObjects.Sprite {
 		this.difficulty = difficulty;
 		this.totalUpdates = 0;
 		this.lastMovementUpdate = 0;
+		
+		this.setTintFill(0xff0000)
 	}
 	
 	update(player) {
@@ -96,12 +98,28 @@ class Egg extends Phaser.GameObjects.Sprite {
 		super(mainScene, x, y, 'star');
 		
 		this.difficulty = difficulty;
+		this.hatchTime = EGG_HATCH_TIME[difficulty];
 	}
 	
 	update(player) {
+		// Friction
 		if (this.body.touching.down) {
 			this.body.setVelocity(this.body.velocity.x*EGG_DECELERATION, this.body.velocity.y);
 		}
+		
+		// If the egg is not moving, count down on its timer to hatch
+		if (Math.abs(this.body.velocity.x) < 1)
+			this.hatchTime -= gameTime.getDeltaTimeSeconds();
+		
+		if (this.hatchTime <= 0)
+			this.hatch();
+	}
+	
+	hatch() {
+		let enemy = new Rider(this.x, this.y-10, this.difficulty+1);
+		enemies.add(enemy, true);
+		
+		this.destroy();
 	}
 	
 	kill() {

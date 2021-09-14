@@ -1,7 +1,7 @@
 var config = {
 	type: Phaser.AUTO,
 	width: 800,
-	height: 600,
+	height: 700,
 	physics: {
 		default: 'arcade',
 		arcade: {
@@ -19,6 +19,7 @@ var config = {
 var mainScene;
 
 var player;
+var gameTime;
 let pLogic = new playerLogic();
 var platforms;
 var lava;
@@ -44,17 +45,36 @@ function preload ()
 function create ()
 {
 	mainScene = this;
+	gameTime = new Timer();
 	
 	this.add.image(0, 0, 'sky').setOrigin(0, 0);
+	this.add.image(0, 100, 'sky').setOrigin(0, 0);
 
 	platforms = this.physics.add.staticGroup();
 
-	platforms.create(400, 568, 'ground').setScale(1, 2).refreshBody();
-	platforms.create(600, 400, 'ground');
-	platforms.create(20, 400, 'ground');
-	platforms.create(50, 220, 'ground');
-	platforms.create(750, 220, 'ground');
+	// Bottom, Center platform
+	platforms.create(400, 668, 'ground').setScale(1, 2).refreshBody();
+	
+	// Invisible ceiling
 	platforms.create(400, -8, 'ground').setScale(2, 0.5).refreshBody();
+	
+	// Top left platform
+	platforms.create(0, 220, 'ground').setScale(0.65, 0.85).refreshBody();
+	// Top right platform
+	platforms.create(800, 220, 'ground').setScale(0.65, 0.85).refreshBody();
+	// Top center platform
+	platforms.create(400, 300, 'ground').setScale(0.65, 0.85).refreshBody();
+	
+	// Bottom left platform
+	platforms.create(0, 425, 'ground').setScale(0.75, 0.85).refreshBody();
+	// Bottom right platform
+	platforms.create(845, 425, 'ground').setScale(0.65, 0.85).refreshBody();
+	// Bottom right offset platform
+	platforms.create(675, 400, 'ground').setScale(0.30, 0.85).refreshBody();
+	
+	// Bottom center platform
+	platforms.create(400, 450, 'ground').setScale(0.45, 0.85).refreshBody();
+	
 
 	player = this.physics.add.sprite(PLAYER_STARTING_X, PLAYER_STARTING_Y, 'dude');
 	player.setBounce(PLAYER_HORIZONTAL_BOUNCE, PLAYER_VERTICAL_BOUNCE);
@@ -83,6 +103,7 @@ function create ()
 	eggs = this.physics.add.group();
 	
 	enemies = this.physics.add.group();
+
 	for(let i = 0; i < 5; i++){
 		let e1 = new Rider(250+(i*50), 500, 0 );
 		enemies.add(e1, true);
@@ -92,9 +113,10 @@ function create ()
 	// enemies.add(e1, true);
 	// enemies.add(e2, true);
 
+
 	lava = this.physics.add.staticGroup();
-	lava.create(100, 575, 'ground').setScale(0.5, 1.6).refreshBody();
-	lava.create(700, 575, 'ground').setScale(0.5, 1.6).refreshBody();
+	lava.create(100, 675, 'ground').setScale(0.5, 1.6).refreshBody();
+	lava.create(700, 675, 'ground').setScale(0.5, 1.6).refreshBody();
 	lava.children.iterate(function(child){
 		child.setTintFill(0xff0000);
 	})
@@ -107,7 +129,7 @@ function create ()
 	this.physics.add.collider(player, lava, hitBomb, null, this);
 	
 	this.physics.add.overlap(player, enemies, hitEnemy, null, this);
-	//this.physics.add.overlap(eggs, player, destroy, null, this);
+	this.physics.add.overlap(player, eggs, killEgg, null, this);
 
 	scoreText = this.add.text(16, 16, 'Score: 0', {fontSize: '32px', fill: '#000'});
 
@@ -115,6 +137,8 @@ function create ()
 
 function update ()
 {
+	gameTime.update();
+	
 	cursors = this.input.keyboard.createCursorKeys();
 	var rObj = this.input.keyboard.addKey('R');
 
