@@ -19,6 +19,7 @@ var config = {
 var mainScene;
 
 var player;
+var gameTime;
 let pLogic = new playerLogic();
 var platforms;
 var lava;
@@ -43,6 +44,7 @@ function preload ()
 function create ()
 {
 	mainScene = this;
+	gameTime = new Timer();
 	
 	this.add.image(0, 0, 'sky').setOrigin(0, 0);
 	this.add.image(0, 100, 'sky').setOrigin(0, 0);
@@ -132,6 +134,8 @@ function create ()
 
 function update ()
 {
+	gameTime.update();
+	
 	cursors = this.input.keyboard.createCursorKeys();
 	var rObj = this.input.keyboard.addKey('R');
 
