@@ -126,7 +126,7 @@ function create ()
 	this.physics.add.collider(player, platforms);
 	this.physics.add.collider(enemies, lava, destroy, null, this);
 	this.physics.add.collider(eggs, lava, destroy, null, this);
-	this.physics.add.collider(player, lava, hitBomb, null, this);
+	this.physics.add.collider(player, lava, hitLava, null, this);
 	
 	this.physics.add.overlap(player, enemies, hitEnemy, null, this);
 	this.physics.add.overlap(player, eggs, killEgg, null, this);

@@ -1,7 +1,7 @@
 // The size of the deadzone. In actuality, it's twice as large as the number provided.
 const ENEMY_COLLISION_DEAD_ZONE_SIZE = 10;
 
-function hitBomb(player, bomb){
+function hitLava(player, bomb){
 	this.physics.pause();
 	player.setTint(0xff0000);
 	player.anims.play('turn');
