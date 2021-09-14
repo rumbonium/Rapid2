@@ -1,4 +1,6 @@
 const DIFFICULTY_TOP_SPEEDS = [100, 125, 175, 200];
+const ENEMY_SCORES = [500, 750, 1000, 1000];
+const ENEMY_COLORS = [0xff0000, 0xffffff, 0x000000, null];
 // The rate that the AI will do inputs measured in frames between. Lower is faster.
 const DIFFICULTY_ADJUST_RATE = [15, 14, 13, 12];
 const DIFFICULTY_RANGE = [200, 250, 350, 400];
@@ -13,9 +15,12 @@ class Rider extends Phaser.GameObjects.Sprite {
 	constructor(x, y, difficulty) {
 		super(mainScene, x, y, 'dude');
 		
+		this.setTintFill(ENEMY_COLORS[difficulty]);
 		this.difficulty = difficulty;
 		this.totalUpdates = 0;
 		this.lastMovementUpdate = 0;
+		
+		this.setTintFill(0xff0000)
 	}
 	
 	update(player) {
@@ -85,20 +90,41 @@ class Rider extends Phaser.GameObjects.Sprite {
 	}
 }
 
+const EGG_SCORES = [250, 500, 750, 1000];
+const EGG_DECELERATION = 0.95;
+
 class Egg extends Phaser.GameObjects.Sprite {
 	constructor(x, y, difficulty) {
 		super(mainScene, x, y, 'star');
 		
 		this.difficulty = difficulty;
+		this.hatchTime = EGG_HATCH_TIME[difficulty];
 	}
 	
 	update(player) {
+		// Friction
 		if (this.body.touching.down) {
-			this.body.setVelocity(this.body.velocity.x*0.95, this.body.velocity.y);
+			this.body.setVelocity(this.body.velocity.x*EGG_DECELERATION, this.body.velocity.y);
 		}
+		
+		// If the egg is not moving, count down on its timer to hatch
+		if (Math.abs(this.body.velocity.x) < 1)
+			this.hatchTime -= gameTime.getDeltaTimeSeconds();
+		
+		if (this.hatchTime <= 0)
+			this.hatch();
+	}
+	
+	hatch() {
+		let enemy = new Rider(this.x, this.y-10, this.difficulty+1);
+		enemies.add(enemy, true);
+		
+		this.destroy();
 	}
 	
 	kill() {
+		score += EGG_SCORES[eggCounter];
+		eggCounter = (eggCounter >= 3) ? 3 : eggCounter + 1;
 		this.destroy();
 	}
 }
