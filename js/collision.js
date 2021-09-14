@@ -49,3 +49,7 @@ function hitEnemy(player, enemy) {
 function destroy(toDestroy, other) {
 	toDestroy.kill();
 }
+
+function killEgg(player, egg) {
+	egg.kill();
+}

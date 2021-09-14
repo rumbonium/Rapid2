@@ -123,7 +123,7 @@ function create ()
 	this.physics.add.collider(player, lava, hitBomb, null, this);
 	
 	this.physics.add.overlap(player, enemies, hitEnemy, null, this);
-	//this.physics.add.overlap(eggs, player, destroy, null, this);
+	this.physics.add.overlap(player, eggs, killEgg, null, this);
 
 	scoreText = this.add.text(16, 16, 'Score: 0', {fontSize: '32px', fill: '#000'});
 
