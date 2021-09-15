@@ -1,7 +1,9 @@
 // Dependant on the 'phaser.js' library
 
-const PLAYER_STARTING_X = 450;
-const PLAYER_STARTING_Y = 350;
+// const PLAYER_STARTING_X = 260;
+// const PLAYER_STARTING_Y = 610;
+const PLAYER_STARTING_X = 80;
+const PLAYER_STARTING_Y = 180;
 const PLAYER_GRAVITY = 100;
 const PLAYER_VERTICAL_BOUNCE = 0.2;
 const PLAYER_HORIZONTAL_BOUNCE = 1;
@@ -9,7 +11,7 @@ const PLAYER_AIR_ACCELERATION = 5;
 const PLAYER_GROUND_ACCELERATION = 20;
 const PLAYER_HORIZONTAL_MAX_SPEED = 300;
 const PLAYER_VERTICAL_IMPULSE_STRENGTH = 100;
-const PLAYER_MAX_LIVES = 2;
+const PLAYER_MAX_LIVES = 5;
 
 
 class playerLogic{
@@ -21,7 +23,7 @@ class playerLogic{
 
     // Player Update Function
     // Takes a 'player' object and a 'cursors' object
-    playerUpdate(player, cursor){
+    playerMove(player, cursor){
         if(cursor.left.isDown){
             if(player.body.touching.down){
                 player.setVelocityX(player.body.velocity.x - PLAYER_GROUND_ACCELERATION);

@@ -68,7 +68,7 @@ function playerDamage(){
 		setGameOver();
 	}
 	else{
-		player.setPosition(PLAYER_STARTING_X, PLAYER_STARTING_Y);
-		player.setVelocity(0);
+		b_playerIsDamaged = true;
+		player.setTint(0xff0000);
 	}
 }

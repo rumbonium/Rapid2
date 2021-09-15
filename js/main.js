@@ -6,7 +6,11 @@ var config = {
 		default: 'arcade',
 		arcade: {
 			gravity: {y: 300},
-			debug: false
+			debug: true,
+			debugShowBody: true,
+			debugShowVelocity: true,
+			debugVelocityColor: 0xffff00,
+			debugBodyColor: 0x0000ff
 		}
 	},
 	scene: {
@@ -17,6 +21,9 @@ var config = {
 };
 
 var mainScene;
+var gState = GAMESTATE.s_menu;
+var b_playerIsDamaged = false;
+var peCollision;
 
 var player;
 var gameTime;
@@ -27,6 +34,9 @@ var stars;
 var score = 0;
 var scoreText;
 var livesText;
+var menuText;
+var waveText;
+
 var bombs;
 var enemies;
 var eggs;
@@ -36,22 +46,22 @@ var game = new Phaser.Game(config);
 
 function preload ()
 {
-	this.load.image('sky', './assets/sky.png');
-	this.load.image('ground', './assets/platform.png');
-	this.load.image('star', './assets/star.png');
-	this.load.image('bomb', './assets/bomb.png');
-	this.load.spritesheet('dude', './assets/dude.png', {frameWidth: 32, frameHeight: 48});
+	mainScene = this;
+	mainScene.load.image('sky', './assets/sky.png');
+	mainScene.load.image('ground', './assets/platform.png');
+	mainScene.load.image('star', './assets/star.png');
+	mainScene.load.image('bomb', './assets/bomb.png');
+	mainScene.load.spritesheet('dude', './assets/dude.png', {frameWidth: 32, frameHeight: 48});
 }
 
 function create ()
 {
-	mainScene = this;
 	gameTime = new Timer();
 	
-	this.add.image(0, 0, 'sky').setOrigin(0, 0);
-	this.add.image(0, 100, 'sky').setOrigin(0, 0);
+	mainScene.add.image(0, 0, 'sky').setOrigin(0, 0);
+	mainScene.add.image(0, 100, 'sky').setOrigin(0, 0);
 
-	platforms = this.physics.add.staticGroup();
+	platforms = mainScene.physics.add.staticGroup();
 
 	// Bottom, Center platform
 	platforms.create(400, 668, 'ground').setScale(1, 2).refreshBody();
@@ -77,86 +87,94 @@ function create ()
 	platforms.create(400, 450, 'ground').setScale(0.45, 0.85).refreshBody();
 	
 
-	player = this.physics.add.sprite(PLAYER_STARTING_X, PLAYER_STARTING_Y, 'dude');
+	player = mainScene.physics.add.sprite(PLAYER_STARTING_X, PLAYER_STARTING_Y, 'dude');
 	player.setBounce(PLAYER_HORIZONTAL_BOUNCE, PLAYER_VERTICAL_BOUNCE);
 	player.setGravity(0, PLAYER_GRAVITY);
 	
-	this.anims.create({
+	mainScene.anims.create({
 		key: 'left',
-		frames: this.anims.generateFrameNumbers('dude', {start: 0, end: 3}),
+		frames: mainScene.anims.generateFrameNumbers('dude', {start: 0, end: 3}),
 		frameRate: 10,
 		repeat: -1
 	});
 
-	this.anims.create({
+	mainScene.anims.create({
 		key: 'turn',
 		frames: [{key: 'dude', frame:4}],
 		frameRate: 20
 	});
 
-	this.anims.create({
+	mainScene.anims.create({
 		key: 'right',
-		frames: this.anims.generateFrameNumbers('dude', {start: 5, end: 8}),
+		frames: mainScene.anims.generateFrameNumbers('dude', {start: 5, end: 8}),
 		frameRate: 10,
 		repeat: -1
 	});
 
-	eggs = this.physics.add.group();
+	eggs = mainScene.physics.add.group();
 	
-	enemies = this.physics.add.group();
+	enemies = mainScene.physics.add.group();
 
-	for(let i = 0; i < 5; i++){
-		let e1 = new Rider(250+(i*50), 500, 0 );
-		enemies.add(e1, true);
-	}
-	// let e1 = new Rider(0, 100, 0);
-	// let e2 = new Rider(100, 100, 2);
-	// enemies.add(e1, true);
-	// enemies.add(e2, true);
-
-
-	lava = this.physics.add.staticGroup();
+	lava = mainScene.physics.add.staticGroup();
 	lava.create(100, 675, 'ground').setScale(0.5, 1.6).refreshBody();
 	lava.create(700, 675, 'ground').setScale(0.5, 1.6).refreshBody();
 	lava.children.iterate(function(child){
 		child.setTintFill(0xff0000);
 	})
 
-	this.physics.add.collider(enemies, platforms);
-	this.physics.add.collider(eggs, platforms);
-	this.physics.add.collider(player, platforms);
-	this.physics.add.collider(enemies, lava, destroy, null, this);
-	this.physics.add.collider(eggs, lava, destroy, null, this);
-	this.physics.add.collider(player, lava, hitLava, null, this);
+	mainScene.physics.add.collider(enemies, platforms);
+	mainScene.physics.add.collider(eggs, platforms);
+	mainScene.physics.add.collider(player, platforms);
+	mainScene.physics.add.collider(enemies, lava, destroy, null, this);
+	mainScene.physics.add.collider(eggs, lava, destroy, null, this);
+	mainScene.physics.add.collider(player, lava, hitLava, null, this);
 	
-	this.physics.add.overlap(player, enemies, hitEnemy, null, this);
-	this.physics.add.overlap(player, eggs, killEgg, null, this);
+	peCollision = mainScene.physics.add.overlap(player, enemies, hitEnemy, null, this);
+	mainScene.physics.add.overlap(player, eggs, killEgg, null, this);
 
-	scoreText = this.add.text(16, 16, 'Score: 0', {fontSize: '32px', fill: '#000'});
-	livesText = this.add.text(800 - 400, 16, 'Lives Remaining: ' + PLAYER_MAX_LIVES, {fontSize: '32px', fill: '#000'});
+	mainScene.physics.pause();
+
+	scoreText = mainScene.add.text(16, 16, 'Score: 0', {fontSize: '32px', fill: '#000'});
+	livesText = mainScene.add.text(800 - 400, 16, 'Lives Remaining: ' + PLAYER_MAX_LIVES, {fontSize: '32px', fill: '#000'});
+	menuText = mainScene.add.text(400, 400, 'SLAY\nHit Spacebar to Start', {fontSize: '32px', fill: '#000'});
+	waveText = mainScene.add.text(300, 300, '', {fontSize: '32px', fill: '#000'});
 }
 
 function update ()
 {
 	gameTime.update();
-	
-	cursors = this.input.keyboard.createCursorKeys();
-	var rObj = this.input.keyboard.addKey('R');
+	//console.log(gameTime.getDeltaTime());
+	cursors = mainScene.input.keyboard.createCursorKeys();
+	var rObj = mainScene.input.keyboard.addKey('R');
+	var spaceObj = mainScene.input.keyboard.addKey('SPACE');
 
-	if(gameOver && rObj.isDown){
-		this.scene.restart();
-		score = 0;
-		pLogic.playerLives = PLAYER_MAX_LIVES;
+	//Game State Machine
+	if(gState === GAMESTATE.s_menu){
+		if(spaceObj.isDown){
+			menuText.setText('');
+			gState = GAMESTATE.s_play;
+			mainScene.physics.resume();
+		}
+	}
+	else if(gState === GAMESTATE.s_play){
+		if(gameOver){
+			gState = GAMESTATE.s_gameOver;
+		}
+		else{
+			gameUpdate();
+		}
+	}
+	else if(gState === GAMESTATE.s_gameOver){
+		if(rObj.isDown){
+			mainScene.scene.restart();
+			score = 0;
+			pLogic.playerLives = PLAYER_MAX_LIVES;
+			gState = GAMESTATE.s_menu;
+			gameOver = false;
+			waveNumber = 0;
+		}
 	}
 	else{
-		pLogic.playerUpdate(player, cursors);
+		console.log("ERROR!!!");
 	}
-	
-	enemies.children.iterate(enemy => enemy.update(player));
-	eggs.children.iterate(egg => egg.update(player));
-
-	this.physics.world.wrap(player, 0);
-	this.physics.world.wrap(enemies, 0);
-	this.physics.world.wrap(eggs, 0);
-
 }
