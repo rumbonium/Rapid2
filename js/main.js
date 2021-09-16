@@ -30,15 +30,14 @@ var gameTime;
 let pLogic = new playerLogic();
 var platforms;
 var lava;
-var stars;
 var score = 0;
 var scoreText;
 var livesText;
 var menuText;
 var waveText;
 
-var bombs;
 var enemies;
+var pterodactyls;
 var eggs;
 var eggCounter = 0;
 var gameOver = false;
@@ -114,6 +113,7 @@ function create ()
 	eggs = mainScene.physics.add.group();
 	
 	enemies = mainScene.physics.add.group();
+	pterodactyls = mainScene.physics.add.group();
 
 	lava = mainScene.physics.add.staticGroup();
 	lava.create(100, 675, 'ground').setScale(0.5, 1.6).refreshBody();
@@ -125,9 +125,11 @@ function create ()
 	mainScene.physics.add.collider(enemies, platforms);
 	mainScene.physics.add.collider(eggs, platforms);
 	mainScene.physics.add.collider(player, platforms);
+	mainScene.physics.add.collider(pterodactyls, platforms);
 	mainScene.physics.add.collider(enemies, lava, destroy, null, this);
 	mainScene.physics.add.collider(eggs, lava, destroy, null, this);
 	mainScene.physics.add.collider(player, lava, hitLava, null, this);
+	mainScene.physics.add.collider(player, pterodactyls, hitPterodactyl, null, this);
 	
 	peCollision = mainScene.physics.add.overlap(player, enemies, hitEnemy, null, this);
 	mainScene.physics.add.overlap(player, eggs, killEgg, null, this);

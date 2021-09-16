@@ -43,6 +43,20 @@ function hitEnemy(player, enemy) {
 	}
 }
 
+function hitPterodactyl(player, pterodactyl) {
+	let diff = player.getCenter().y - pterodactyl.getCenter().y;
+	
+	if (Math.abs(diff) < ENEMY_COLLISION_DEAD_ZONE_SIZE) {
+		score += PTERODACTYL_SCORE;
+		scoreText.setText('Score: ' + score);
+		
+		pterodactyl.kill();
+	}
+	else {
+		playerDamage();
+	}
+}
+
 function destroy(toDestroy, other) {
 	toDestroy.kill();
 }
@@ -70,5 +84,8 @@ function playerDamage(){
 	else{
 		b_playerIsDamaged = true;
 		player.setTint(0xff0000);
+		
+		// Kill all active pterodactyls
+		pterodactyls.children.iterate(pterodactyl => pterodactyl.kill());
 	}
 }

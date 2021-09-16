@@ -61,7 +61,7 @@ class Rider extends Phaser.GameObjects.Sprite {
 				// Randomly move up sometimes
 				let odds1 = Phaser.Math.Between(0, 100);
 				if (odds1 > 30) {
-					this.body.setVelocity(this.body.velocity.x, this.body.velocity.y + ADJUST_UP_SPEED);
+					this.body.setVelocity(this.body.velocity.x, this.body.velocity.y - ADJUST_UP_SPEED);
 				}
 				
 				
@@ -82,6 +82,64 @@ class Rider extends Phaser.GameObjects.Sprite {
 				// Clamp speed
 				this.body.setVelocity(Phaser.Math.Clamp(this.body.velocity.x, -DIFFICULTY_TOP_SPEEDS[this.difficulty], DIFFICULTY_TOP_SPEEDS[this.difficulty]));
 			}
+		}
+	}
+	
+	kill() {
+		this.destroy();
+	}
+}
+
+const PTERODACTYL_SCORE = 1000;
+const PTERODACTYL_SPEED = 150;
+const PTERODACTYL_UPDATE_RATE = 15; //ms
+class Pterodactyl extends Phaser.GameObjects.Sprite {
+	constructor(x, y) {
+		super(mainScene, x, y, 'dude');
+		this.setScale(3, 0.5);
+		this.timeSinceUpdate = 0;
+	}
+	
+	update(player) {
+		this.timeSinceUpdate += gameTime.getDeltaTime();
+		
+		// If we're not moving, move towards the far side of the screen
+		if (this.body.velocity.x == 0) {
+			let maxX = mainScene.sys.game.scale.gameSize.x;
+			
+			if (this.x < maxX/2)
+				this.body.setVelocity(PTERODACTYL_SPEED, 0);
+			else
+				this.body.setVelocity(-PTERODACTYL_SPEED, 0);
+		}
+		
+		// Randomly move up sometimes
+		let odds1 = Phaser.Math.Between(0, 100);
+		if (odds1 > 45 && this.timeSinceUpdate >= PTERODACTYL_UPDATE_RATE && this.y > 100) {
+			this.body.setVelocity(this.body.velocity.x, this.body.velocity.y - 15);
+			this.timeSinceUpdate = 0;
+		}
+		
+		// If Y is near the lava, move up always.
+		if (this.y > 550)
+			this.body.setVelocity(this.body.velocity.x, this.body.velocity.y - 10);
+		
+		// If all enemies are gone, move off screen
+		if (eggs.countActive() === 0 && enemies.countActive() === 0) {
+			let maxX = mainScene.sys.game.scale.gameSize.x;
+			
+			// If we're going right and we're closer to left, go left instead
+			if (this.body.velocity.x > 0 && this.x < maxX/2) {
+				this.body.setVelocity(-this.body.velocity.x, this.body.velocity.y);
+			}
+			// If we're going left and we're closer to right, go right instead
+			if (this.body.velocity.x < 0 && this.x > maxX/2) {
+				this.body.setVelocity(-this.body.velocity.x, this.body.velocity.y);
+			}
+			
+			
+			if (this.x < 0 || this.x > maxX)
+				this.kill();
 		}
 	}
 	
