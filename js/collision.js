@@ -15,7 +15,7 @@ function hitEnemy(player, enemy) {
 
 	else if (diff < -ENEMY_COLLISION_DEAD_ZONE_SIZE) {
 		//Create an egg, give it velocity
-		let egg = new Egg(enemy.getCenter().x, enemy.getCenter().y, 0);
+		let egg = new Egg(enemy.getCenter().x, enemy.getCenter().y, enemy.difficulty);
 		eggs.add(egg, true);
 		egg.body.setVelocity(enemy.body.velocity.x, enemy.body.velocity.y);
 		egg.body.setBounce(1, 0.35);
@@ -78,7 +78,13 @@ function setGameOver(){
 }
 
 function playerDamage(){
-	if(pLogic.decrementPlayerLives() <= 0){
+	if (pLogic.mount>0) {
+		// TODO: Create a new mount
+		
+		// Knock the player off
+		pLogic.mount = -1;
+	}
+	else if(pLogic.decrementPlayerLives() <= 0){
 		setGameOver();
 	}
 	else{
@@ -86,6 +92,6 @@ function playerDamage(){
 		player.setTint(0xff0000);
 		
 		// Kill all active pterodactyls
-		pterodactyls.children.iterate(pterodactyl => pterodactyl.kill());
+		pterodactyls.children.each(pterodactyl => pterodactyl.kill());
 	}
 }

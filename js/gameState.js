@@ -226,7 +226,7 @@ function gameUpdate(){
         pLogic.playerMove(player, cursors);
     }
     enemies.children.iterate(enemy => enemy.update(player));
-	pterodactyls.children.iterate(pt => pt.update(player));
+	pterodactyls.children.each(pt => pt.update(player));
     eggs.children.each(function(egg) {egg.update(player)});
     mainScene.physics.world.wrap(player, 0);
     mainScene.physics.world.wrap(enemies, 0);
