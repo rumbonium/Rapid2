@@ -124,9 +124,10 @@ class Pterodactyl extends Phaser.GameObjects.Sprite {
 		if (this.y > 550)
 			this.body.setVelocity(this.body.velocity.x, this.body.velocity.y - 10);
 		
+		
 		// If all enemies are gone, move off screen
 		if (eggs.countActive() === 0 && enemies.countActive() === 0) {
-			let maxX = mainScene.sys.game.scale.gameSize.x;
+			let maxX = mainScene.sys.game.canvas.width;
 			
 			// If we're going right and we're closer to left, go left instead
 			if (this.body.velocity.x > 0 && this.x < maxX/2) {
@@ -138,7 +139,7 @@ class Pterodactyl extends Phaser.GameObjects.Sprite {
 			}
 			
 			
-			if (this.x < 0 || this.x > maxX)
+			if (this.x < 0 || this.x > maxX-1)
 				this.kill();
 		}
 	}
