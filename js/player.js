@@ -28,28 +28,25 @@ class playerLogic{
     // Takes a 'player' object and a 'cursors' object
     playerMove(player, cursor){
         if(cursor.left.isDown){
+            player.flipX = false;
             if(player.body.touching.down){
                 player.setVelocityX(player.body.velocity.x - PLAYER_GROUND_ACCELERATION);
-                player.anims.play('left', true);
             }
             else{
                 player.setVelocityX(player.body.velocity.x - PLAYER_AIR_ACCELERATION);
-                player.anims.play('left', true);
             }
         }
         else if(cursor.right.isDown){
+            player.flipX = true;
             if(player.body.touching.down){
                 player.setVelocityX(player.body.velocity.x + PLAYER_GROUND_ACCELERATION);
-                player.anims.play('right', true);
             }
             else{
                 player.setVelocityX(player.body.velocity.x + PLAYER_AIR_ACCELERATION);
-                player.anims.play('right', true);
             }
         }
         else{
-            //player.setVelocityX(0);
-            player.anims.play('turn');
+
         }
 		
 		// Clamp player speed
@@ -62,7 +59,7 @@ class playerLogic{
             if(cursor.up.isDown){
                 this.flapstate = 1;
                 player.setVelocityY(player.body.velocity.y - PLAYER_VERTICAL_IMPULSE_STRENGTH);
-                //play flap animation here
+                player.anims.play('flap');
             }
             else{
                 this.flapstate = 0;

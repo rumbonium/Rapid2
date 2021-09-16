@@ -1,7 +1,7 @@
 var config = {
 	type: Phaser.AUTO,
-	width: 800,
-	height: 700,
+	width: 1820,
+	height: 900,
 	physics: {
 		default: 'arcade',
 		arcade: {
@@ -47,75 +47,76 @@ var game = new Phaser.Game(config);
 function preload ()
 {
 	mainScene = this;
-	mainScene.load.image('sky', './assets/sky.png');
-	mainScene.load.image('ground', './assets/platform.png');
-	mainScene.load.image('star', './assets/star.png');
-	mainScene.load.image('bomb', './assets/bomb.png');
-	mainScene.load.spritesheet('dude', './assets/dude.png', {frameWidth: 32, frameHeight: 48});
+	mainScene.load.image('background', './assets/Slay_background.jpg');
+	mainScene.load.image('platform', './assets/platform_var_2.png');
+	mainScene.load.image('ceiling', './assets/platform.png')
+	mainScene.load.image('rider', './assets/rider.png');
+	mainScene.load.spritesheet('rider_on_mount', './assets/Slay_rider_on_mount.png', {frameWidth: 256, frameHeight: 256});
+	mainScene.load.spritesheet('mount', './assets/Slay_mount.png', {frameWidth: 256, frameHeight: 256});
 }
 
 function create ()
 {
 	gameTime = new Timer();
 	
-	mainScene.add.image(0, 0, 'sky').setOrigin(0, 0);
-	mainScene.add.image(0, 100, 'sky').setOrigin(0, 0);
+	mainScene.add.image(0, 0, 'background').setOrigin(0, 0).setScale(0.48);
+	//mainScene.add.image(0, 100, 'sky').setOrigin(0, 0);
 
 	platforms = mainScene.physics.add.staticGroup();
 	lavaPlatforms = mainScene.physics.add.staticGroup();
 
 	
 	// Invisible ceiling
-	platforms.create(400, -8, 'ground').setScale(2, 0.5).refreshBody();
+	platforms.create(400, -8, 'ceiling').setScale(2, 0.5).refreshBody();
 	
 	// Top left platform
-	platforms.create(0, 220, 'ground').setScale(0.65, 0.85).refreshBody();
+	platforms.create(0, 220, 'platform').setScale(0.65, 0.85).refreshBody();
 	// Top right platform
-	platforms.create(800, 220, 'ground').setScale(0.65, 0.85).refreshBody();
+	platforms.create(800, 220, 'platform').setSize(340, 35).setOffset(5, 14);
 	// Top center platform
-	platforms.create(400, 300, 'ground').setScale(0.65, 0.85).refreshBody();
+	platforms.create(400, 300, 'platform').setScale(0.65, 0.85).refreshBody();
 	
 	// Bottom left platform
-	platforms.create(0, 425, 'ground').setScale(0.75, 0.85).refreshBody();
+	platforms.create(0, 425, 'platform').setScale(0.75, 0.85).refreshBody();
 	// Bottom right platform
-	platforms.create(845, 425, 'ground').setScale(0.65, 0.85).refreshBody();
+	platforms.create(845, 425, 'platform').setScale(0.65, 0.85).refreshBody();
 	// Bottom right offset platform
-	platforms.create(675, 400, 'ground').setScale(0.30, 0.85).refreshBody();
+	platforms.create(675, 400, 'platform').setScale(0.30, 0.85).refreshBody();
 	
 	// Bottom center platform
-	platforms.create(400, 450, 'ground').setScale(0.45, 0.85).refreshBody();
+	platforms.create(400, 450, 'platform').setScale(0.45, 0.85).refreshBody();
 	
 	// Very Bottom, Center platform
-	platforms.create(400, 668, 'ground').setScale(1, 2).refreshBody();
+	platforms.create(400, 668, 'platform').setScale(1, 2).refreshBody();
 	
 	// lava platforms
-	lavaPlatforms.create(100, 640, 'ground').setScale(0.5, 0.25).setTint(0x000000).refreshBody(); // Left
-	lavaPlatforms.create(700, 640, 'ground').setScale(0.5, 0.25).setTint(0x000000).refreshBody(); // Right
+	lavaPlatforms.create(100, 640, 'ceiling').setScale(0.5, 0.25).setTint(0x000000).refreshBody(); // Left
+	lavaPlatforms.create(700, 640, 'ceiling').setScale(0.5, 0.25).setTint(0x000000).refreshBody(); // Right
 	
 
-	player = mainScene.physics.add.sprite(PLAYER_STARTING_X, PLAYER_STARTING_Y, 'dude');
+	player = mainScene.physics.add.sprite(PLAYER_STARTING_X, PLAYER_STARTING_Y, 'rider_on_mount').setScale(0.25);
 	player.setBounce(PLAYER_HORIZONTAL_BOUNCE, PLAYER_VERTICAL_BOUNCE);
 	player.setGravity(0, PLAYER_GRAVITY);
 	
 	mainScene.anims.create({
-		key: 'left',
-		frames: mainScene.anims.generateFrameNumbers('dude', {start: 0, end: 3}),
-		frameRate: 10,
-		repeat: -1
+		key: 'flap',
+		frames: mainScene.anims.generateFrameNumbers('rider_on_mount', {frames: [3, 2, 1, 0]}),
+		frameRate: 30,
+		repeat: 0
 	});
 
-	mainScene.anims.create({
-		key: 'turn',
-		frames: [{key: 'dude', frame:4}],
-		frameRate: 20
-	});
+	// mainScene.anims.create({
+	// 	key: 'turn',
+	// 	frames: [{key: 'dude', frame:4}],
+	// 	frameRate: 20
+	// });
 
-	mainScene.anims.create({
-		key: 'right',
-		frames: mainScene.anims.generateFrameNumbers('dude', {start: 5, end: 8}),
-		frameRate: 10,
-		repeat: -1
-	});
+	// mainScene.anims.create({
+	// 	key: 'right',
+	// 	frames: mainScene.anims.generateFrameNumbers('dude', {start: 5, end: 8}),
+	// 	frameRate: 10,
+	// 	repeat: -1
+	// });
 
 	eggs = mainScene.physics.add.group();
 	

@@ -15,6 +15,7 @@ class Rider extends Phaser.GameObjects.Sprite {
 	constructor(x, y, difficulty) {
 		super(mainScene, x, y, 'dude');
 		
+		//this.setScale(0.25);
 		this.setTintFill(ENEMY_COLORS[difficulty]);
 		this.difficulty = difficulty;
 		this.totalUpdates = 0;
@@ -43,6 +44,7 @@ class Rider extends Phaser.GameObjects.Sprite {
 				if (player.getCenter().y <= this.getCenter().y) {
 					
 					this.body.setVelocity(this.body.velocity.x, this.body.velocity.y - ADJUST_UP_SPEED);
+					this.anims.play('flap');
 				}
 				
 				// If we're higher, charge the player
@@ -62,6 +64,7 @@ class Rider extends Phaser.GameObjects.Sprite {
 				let odds1 = Phaser.Math.Between(0, 100);
 				if (odds1 > 30) {
 					this.body.setVelocity(this.body.velocity.x, this.body.velocity.y - ADJUST_UP_SPEED);
+					this.anims.play('flap');
 				}
 				
 				
@@ -95,7 +98,7 @@ const PTERODACTYL_SPEED = 150;
 const PTERODACTYL_UPDATE_RATE = 15; //ms
 class Pterodactyl extends Phaser.GameObjects.Sprite {
 	constructor(x, y) {
-		super(mainScene, x, y, 'dude');
+		super(mainScene, x, y, 'mount');
 		this.setScale(3, 0.5);
 		this.timeSinceUpdate = 0;
 	}
@@ -154,8 +157,9 @@ const EGG_DECELERATION = 0.95;
 
 class Egg extends Phaser.GameObjects.Sprite {
 	constructor(x, y, difficulty) {
-		super(mainScene, x, y, 'star');
-		
+		super(mainScene, x, y, 'rider');
+		this.setScale(0.25);
+		this.setTintFill(0xff0000)
 		this.difficulty = difficulty;
 		this.hatchTime = EGG_HATCH_TIME[difficulty];
 	}
