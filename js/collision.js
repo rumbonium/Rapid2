@@ -17,8 +17,8 @@ function hitEnemy(player, enemy) {
 		//Create an egg, give it velocity
 		let egg = new Egg(enemy.getCenter().x, enemy.getCenter().y, enemy.difficulty);
 		eggs.add(egg, true);
+		egg.setPhysics();
 		egg.body.setVelocity(enemy.body.velocity.x, enemy.body.velocity.y);
-		egg.body.setBounce(1, 0.35);
 		
 		enemy.kill();
 

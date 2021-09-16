@@ -48,21 +48,11 @@ class Rider extends Phaser.GameObjects.Sprite {
 			
 			// If the player is further away, move up and down a bit randomly
 			else {
-				// Randomly move up sometimes
-				let odds1 = Phaser.Math.Between(0, 100);
-				if (odds1 > 30) {
-					this.body.setVelocity(this.body.velocity.x, this.body.velocity.y - ADJUST_UP_SPEED);
-					this.anims.play('flap');
-				}
-				
-				
-				// 60% chance to keep moving as we already are, 40% to pick a new location
-				let odds2 = Phaser.Math.Between(0,100);
+				let odds = Phaser.Math.Between(0, 100);
 				let sign = Math.sign(this.body.velocity.x); // Sign of the current moving direction
 				
 				// Randomly move up sometimes
-				let odds = Phaser.Math.Between(0, 100);
-				if (odds > 45) {
+				if (odds > 60) {
 					this.body.setVelocityY(this.body.velocity.y - ADJUST_UP_SPEED);
 					this.anims.play('flap');
 				}
@@ -75,6 +65,10 @@ class Rider extends Phaser.GameObjects.Sprite {
 				
 			}
 		}
+	}
+	
+	setPhysics() {
+		this.body.setBounce(1, 0.25);
 	}
 	
 	kill() {
@@ -136,6 +130,11 @@ class Pterodactyl extends Phaser.GameObjects.Sprite {
 		}
 	}
 	
+	setPhysics() {
+		this.body.setBounce(1, 0.25);
+		this.body.gravity.y = 150;
+	}
+	
 	kill() {
 		this.destroy();
 	}
@@ -165,6 +164,10 @@ class Egg extends Phaser.GameObjects.Sprite {
 		
 		if (this.hatchTime <= 0)
 			this.hatch();
+	}
+	
+	setPhysics() {
+		this.body.setBounce(1, 0.35);
 	}
 	
 	hatch() {
