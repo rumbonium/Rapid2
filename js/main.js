@@ -29,6 +29,7 @@ var player;
 var gameTime;
 let pLogic = new playerLogic();
 var platforms;
+var lavaPlatforms;
 var lava;
 var score = 0;
 var scoreText;
@@ -61,9 +62,8 @@ function create ()
 	mainScene.add.image(0, 100, 'sky').setOrigin(0, 0);
 
 	platforms = mainScene.physics.add.staticGroup();
+	lavaPlatforms = mainScene.physics.add.staticGroup();
 
-	// Bottom, Center platform
-	platforms.create(400, 668, 'ground').setScale(1, 2).refreshBody();
 	
 	// Invisible ceiling
 	platforms.create(400, -8, 'ground').setScale(2, 0.5).refreshBody();
@@ -84,6 +84,13 @@ function create ()
 	
 	// Bottom center platform
 	platforms.create(400, 450, 'ground').setScale(0.45, 0.85).refreshBody();
+	
+	// Very Bottom, Center platform
+	platforms.create(400, 668, 'ground').setScale(1, 2).refreshBody();
+	
+	// lava platforms
+	lavaPlatforms.create(100, 640, 'ground').setScale(0.5, 0.25).setTint(0x000000).refreshBody(); // Left
+	lavaPlatforms.create(700, 640, 'ground').setScale(0.5, 0.25).setTint(0x000000).refreshBody(); // Right
 	
 
 	player = mainScene.physics.add.sprite(PLAYER_STARTING_X, PLAYER_STARTING_Y, 'dude');
@@ -126,6 +133,10 @@ function create ()
 	mainScene.physics.add.collider(eggs, platforms);
 	mainScene.physics.add.collider(player, platforms);
 	mainScene.physics.add.collider(pterodactyls, platforms);
+	mainScene.physics.add.collider(enemies, lavaPlatforms);
+	mainScene.physics.add.collider(eggs, lavaPlatforms);
+	mainScene.physics.add.collider(player, lavaPlatforms);
+	mainScene.physics.add.collider(pterodactyls, lavaPlatforms);
 	mainScene.physics.add.collider(enemies, lava, destroy, null, this);
 	mainScene.physics.add.collider(eggs, lava, destroy, null, this);
 	mainScene.physics.add.collider(player, lava, hitLava, null, this);

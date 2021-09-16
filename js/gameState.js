@@ -48,6 +48,11 @@ function gameUpdate(){
             t_waveDisplay = WAVE_TEXT_DISPLAY_TIME;
             waveNumber++;
             b_waveDisplayRunning = true;
+			
+			// Burn bridges on wave 3
+			if (waveNumber == 3) {
+				lavaPlatforms.clear(true, true);
+			}
         }
     }
 
