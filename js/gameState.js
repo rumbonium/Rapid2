@@ -50,7 +50,7 @@ function gameUpdate(){
             b_waveDisplayRunning = true;
 			
 			// Burn bridges on wave 3
-			if (waveNumber == 3) {
+			if (waveNumber == 9) {
 				lavaPlatforms.clear(true, true);
 			}
         }
@@ -222,13 +222,12 @@ function gameUpdate(){
 		}
 	}
 
-
     if(!b_playerDeathPauseRunning && !b_playerSpawnRunning){
         pLogic.playerMove(player, cursors);
     }
     enemies.children.iterate(enemy => enemy.update(player));
 	pterodactyls.children.iterate(pt => pt.update(player));
-    eggs.children.iterate(egg => egg.update(player));
+    eggs.children.each(function(egg) {egg.update(player)});
     mainScene.physics.world.wrap(player, 0);
     mainScene.physics.world.wrap(enemies, 0);
 	mainScene.physics.world.wrap(pterodactyls, 0);
