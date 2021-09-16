@@ -1,31 +1,48 @@
 // Dependant on the 'phaser.js' library
 
-const PLAYER_STARTING_X = 450;
-const PLAYER_STARTING_Y = 300;
+// const PLAYER_STARTING_X = 260;
+// const PLAYER_STARTING_Y = 610;
+const PLAYER_STARTING_X = 80;
+const PLAYER_STARTING_Y = 180;
 const PLAYER_GRAVITY = 100;
 const PLAYER_VERTICAL_BOUNCE = 0.2;
 const PLAYER_HORIZONTAL_BOUNCE = 1;
-const PLAYER_HORIZONTAL_ACCELERATION = 5;
+const PLAYER_AIR_ACCELERATION = 5;
+const PLAYER_GROUND_ACCELERATION = 20;
 const PLAYER_HORIZONTAL_MAX_SPEED = 300;
 const PLAYER_VERTICAL_IMPULSE_STRENGTH = 100;
+const PLAYER_MAX_LIVES = 5;
 
 
 class playerLogic{
     constructor(){
         this.flapstate = 0;
+        this.playerLives = PLAYER_MAX_LIVES;
     }
 
 
     // Player Update Function
     // Takes a 'player' object and a 'cursors' object
-    playerUpdate(player, cursor){
+    playerMove(player, cursor){
         if(cursor.left.isDown){
-            player.setVelocityX(player.body.velocity.x - PLAYER_HORIZONTAL_ACCELERATION);
-            player.anims.play('left', true);
+            if(player.body.touching.down){
+                player.setVelocityX(player.body.velocity.x - PLAYER_GROUND_ACCELERATION);
+                player.anims.play('left', true);
+            }
+            else{
+                player.setVelocityX(player.body.velocity.x - PLAYER_AIR_ACCELERATION);
+                player.anims.play('left', true);
+            }
         }
         else if(cursor.right.isDown){
-            player.setVelocityX(player.body.velocity.x + PLAYER_HORIZONTAL_ACCELERATION);
-            player.anims.play('right', true);
+            if(player.body.touching.down){
+                player.setVelocityX(player.body.velocity.x + PLAYER_GROUND_ACCELERATION);
+                player.anims.play('right', true);
+            }
+            else{
+                player.setVelocityX(player.body.velocity.x + PLAYER_AIR_ACCELERATION);
+                player.anims.play('right', true);
+            }
         }
         else{
             //player.setVelocityX(0);
@@ -63,9 +80,13 @@ class playerLogic{
         else{
             console.log("ERROR: " + this.flapstate);
         }
-}
+    }
 
-
+    decrementPlayerLives(){
+        this.playerLives--;
+        livesText.setText('Lives Remaining: ' + this.playerLives);
+        return this.playerLives;
+    }
 
 
 
