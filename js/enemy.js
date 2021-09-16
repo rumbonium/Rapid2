@@ -1,10 +1,10 @@
-const DIFFICULTY_TOP_SPEEDS = [100, 125, 175, 200];
-const ENEMY_SCORES = [500, 750, 1000, 1000];
-const ENEMY_COLORS = [0xff0000, 0xffffff, 0x000000, null];
+const DIFFICULTY_TOP_SPEEDS = [100, 125, 175];
+const ENEMY_SCORES = [500, 750, 1000];
+const ENEMY_COLORS = [0xff0000, 0xffffff, 0x000000];
 // The rate that the AI will do inputs measured in frames between. Lower is faster.
-const DIFFICULTY_ADJUST_RATE = [15, 14, 13, 12];
-const DIFFICULTY_RANGE = [200, 250, 350, 400];
-const EGG_HATCH_TIME = [10, 8, 6, 3];
+const DIFFICULTY_ADJUST_RATE = [15, 14, 13];
+const DIFFICULTY_RANGE = [200, 250, 350];
+const EGG_HATCH_TIME = [10, 8, 6];
 
 // How much they can move in a single update - probably the same 
 // as the player's upwards rate
@@ -13,15 +13,14 @@ const ADJUST_UP_SPEED = 65;
 
 class Rider extends Phaser.GameObjects.Sprite {
 	constructor(x, y, difficulty) {
-		super(mainScene, x, y, 'dude');
+		super(mainScene, x, y, 'rider_on_mount');
+		difficulty = difficulty > 2 ? 2 : difficulty;
 		
-		//this.setScale(0.25);
+		this.setScale(0.25);
 		this.setTintFill(ENEMY_COLORS[difficulty]);
 		this.difficulty = difficulty;
 		this.totalUpdates = 0;
 		this.lastMovementUpdate = 0;
-		
-		this.setTintFill(0xff0000)
 	}
 	
 	update(player) {
@@ -41,24 +40,13 @@ class Rider extends Phaser.GameObjects.Sprite {
 			if (distance < DIFFICULTY_RANGE[this.difficulty]) {
 				
 				// If we are lower, go up as fast as this difficulty allows
-				if (player.getCenter().y <= this.getCenter().y) {
-					
-					this.body.setVelocity(this.body.velocity.x, this.body.velocity.y - ADJUST_UP_SPEED);
+				if (player.getCenter().y-ENEMY_COLLISION_DEAD_ZONE_SIZE <= this.getCenter().y) {
+					this.body.setVelocityY(this.body.velocity.y - ADJUST_UP_SPEED);
 					this.anims.play('flap');
-				}
-				
-				// If we're higher, charge the player
-				else {
-					if (xDif > 0) {
-						this.body.setVelocity(this.body.velocity.x + ADJUST_UP_SPEED, this.body.velocity.y);
-					}
-					else {
-						this.body.setVelocity(this.body.velocity.x - ADJUST_UP_SPEED, this.body.velocity.y);
-					}
 				}
 			}
 			
-			// If the player is further away, move a bit randomly but generally conserve direction
+			// If the player is further away, move up and down a bit randomly
 			else {
 				// Randomly move up sometimes
 				let odds1 = Phaser.Math.Between(0, 100);
@@ -72,18 +60,19 @@ class Rider extends Phaser.GameObjects.Sprite {
 				let odds2 = Phaser.Math.Between(0,100);
 				let sign = Math.sign(this.body.velocity.x); // Sign of the current moving direction
 				
-				if (odds2 >= 60)
-					this.body.setVelocity(this.body.velocity.x + sign*ADJUST_UP_SPEED);
-				else
-					this.body.setVelocity(this.body.velocity.x - sign*ADJUST_UP_SPEED);
+				// Randomly move up sometimes
+				let odds = Phaser.Math.Between(0, 100);
+				if (odds > 45) {
+					this.body.setVelocityY(this.body.velocity.y - ADJUST_UP_SPEED);
+					this.anims.play('flap');
+				}
 				
+				// If they aren't moving, give them a nudge in a random direction
+				if (sign == 0) {
+					let randDir = odds > 50 ? 1 : -1;
+					this.body.setVelocity(randDir*DIFFICULTY_TOP_SPEEDS[this.difficulty]);
+				}
 				
-				// If they aren't moving, give them a nudge
-				if (sign == 0)
-					this.body.setVelocity(ADJUST_UP_SPEED);
-				
-				// Clamp speed
-				this.body.setVelocity(Phaser.Math.Clamp(this.body.velocity.x, -DIFFICULTY_TOP_SPEEDS[this.difficulty], DIFFICULTY_TOP_SPEEDS[this.difficulty]));
 			}
 		}
 	}
