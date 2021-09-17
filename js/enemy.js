@@ -88,7 +88,7 @@ const PTERODACTYL_UPDATE_RATE = 15; //ms
 class Pterodactyl extends Phaser.GameObjects.Sprite {
 	constructor(x, y) {
 		super(mainScene, x, y, 'mount');
-		this.setScale(3, 0.5);
+		this.setScale(0.75, 0.125);
 		this.timeSinceUpdate = 0;
 	}
 	

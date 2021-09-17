@@ -60,43 +60,37 @@ function create ()
 	gameTime = new Timer();
 	
 	mainScene.add.image(0, 0, 'background').setOrigin(0, 0).setScale(0.48);
-	//mainScene.add.image(0, 100, 'sky').setOrigin(0, 0);
 
 	platforms = mainScene.physics.add.staticGroup();
 	lavaPlatforms = mainScene.physics.add.staticGroup();
 
 	
 	// Invisible ceiling
-	platforms.create(400, -8, 'ceiling').setScale(2, 0.5).refreshBody();
+	platforms.create(1820/2, -10, 'ceiling').setScale(5, 0.5).refreshBody();
 	
-	// Top left platform
-	platforms.create(0, 220, 'platform').setScale(0.65, 0.85).refreshBody();
-	// Top right platform
-	platforms.create(800, 220, 'platform').setSize(340, 35).setOffset(5, 14);
-	// Top center platform
-	platforms.create(400, 300, 'platform').setScale(0.65, 0.85).refreshBody();
-	
-	// Bottom left platform
-	platforms.create(0, 425, 'platform').setScale(0.75, 0.85).refreshBody();
-	// Bottom right platform
-	platforms.create(845, 425, 'platform').setScale(0.65, 0.85).refreshBody();
-	// Bottom right offset platform
-	platforms.create(675, 400, 'platform').setScale(0.30, 0.85).refreshBody();
-	
-	// Bottom center platform
-	platforms.create(400, 450, 'platform').setScale(0.45, 0.85).refreshBody();
-	
-	// Very Bottom, Center platform
-	platforms.create(400, 668, 'platform').setScale(1, 2).refreshBody();
-	
+	lava = mainScene.physics.add.staticGroup();
+	lava.create(1820/2, 875, 'ceiling').setScale(5, 1.6).refreshBody();
+	//lava.create(700, 675, 'ceiling').setScale(0.5, 1.6).refreshBody();
+	lava.children.iterate(function(child){
+		child.setTintFill(0xff0000);
+	});
+
 	// lava platforms
-	lavaPlatforms.create(100, 640, 'ceiling').setScale(0.5, 0.25).setTint(0x000000).refreshBody(); // Left
-	lavaPlatforms.create(700, 640, 'ceiling').setScale(0.5, 0.25).setTint(0x000000).refreshBody(); // Right
+	lavaPlatforms.create(50, 840, 'ceiling').setScale(0.5, 0.25).setTint(0x000000).refreshBody();
+	lavaPlatforms.create(625, 840, 'ceiling').setScale(0.5, 0.25).setTint(0x000000).refreshBody();
+	lavaPlatforms.create(1200, 840, 'ceiling').setScale(0.5, 0.25).setTint(0x000000).refreshBody();
+	lavaPlatforms.create(1775, 840, 'ceiling').setScale(0.5, 0.25).setTint(0x000000).refreshBody();
 	
+	// platforms
+	platforms.create(300, 850, 'platform').setSize(450, 35).setOffset(60, 14);
+	platforms.create(875, 850, 'platform').setSize(450, 35).setOffset(60, 14);
+	platforms.create(1450, 850, 'platform').setSize(450, 35).setOffset(60, 14);
+
 
 	player = mainScene.physics.add.sprite(PLAYER_STARTING_X, PLAYER_STARTING_Y, 'rider_on_mount').setScale(0.25);
 	player.setBounce(PLAYER_HORIZONTAL_BOUNCE, PLAYER_VERTICAL_BOUNCE);
 	player.setGravity(0, PLAYER_GRAVITY);
+	player.setTintFill(0x0000ff);
 	
 	mainScene.anims.create({
 		key: 'flap',
@@ -105,30 +99,10 @@ function create ()
 		repeat: 0
 	});
 
-	// mainScene.anims.create({
-	// 	key: 'turn',
-	// 	frames: [{key: 'dude', frame:4}],
-	// 	frameRate: 20
-	// });
-
-	// mainScene.anims.create({
-	// 	key: 'right',
-	// 	frames: mainScene.anims.generateFrameNumbers('dude', {start: 5, end: 8}),
-	// 	frameRate: 10,
-	// 	repeat: -1
-	// });
-
 	eggs = mainScene.physics.add.group();
 	
 	enemies = mainScene.physics.add.group();
 	pterodactyls = mainScene.physics.add.group();
-
-	lava = mainScene.physics.add.staticGroup();
-	lava.create(100, 675, 'ground').setScale(0.5, 1.6).refreshBody();
-	lava.create(700, 675, 'ground').setScale(0.5, 1.6).refreshBody();
-	lava.children.iterate(function(child){
-		child.setTintFill(0xff0000);
-	})
 
 	mainScene.physics.add.collider(enemies, platforms);
 	mainScene.physics.add.collider(eggs, platforms);

@@ -4,7 +4,8 @@ const GAMESTATE = {
     s_gameOver: 's_gameOver'
 };
 
-const ENEMY_WAVE_NUMBERS = [1, 3, 5, 7, 9, 11];
+// const ENEMY_WAVE_NUMBERS = [1, 3, 5, 7, 9, 11];
+const ENEMY_WAVE_NUMBERS = [2, 2, 2, 2, 2, 2];
 
 
 const WAVE_TEXT_DISPLAY_TIME = 2000; //ms
@@ -15,8 +16,8 @@ const ENEMY_SPAWN_PERIOD = 300; //ms
 const SAFETY_DURATION = 5000; //ms
 const SAFETY_FLASH_PERIOD = 100; //ms
 const PTERODACTYL_SPAWN_TIME = 8000; //ms
-const SPAWN_LOCATION_X = [400, 75, 650, 425];
-const SPAWN_LOCATION_Y = [610, 385, 360, 260];
+const SPAWN_LOCATION_X = [625, 625, 1200, 1200];
+const SPAWN_LOCATION_Y = [790, 790, 790, 790];
 
 var waveNumber = 0;
 var t_waveDisplay = 0;

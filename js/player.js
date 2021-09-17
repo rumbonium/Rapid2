@@ -2,8 +2,8 @@
 
 // const PLAYER_STARTING_X = 260;
 // const PLAYER_STARTING_Y = 610;
-const PLAYER_STARTING_X = 80;
-const PLAYER_STARTING_Y = 180;
+const PLAYER_STARTING_X = 888;
+const PLAYER_STARTING_Y = 800;
 const PLAYER_GRAVITY = 100;
 const PLAYER_VERTICAL_BOUNCE = 0.2;
 const PLAYER_HORIZONTAL_BOUNCE = 1;
@@ -46,7 +46,12 @@ class playerLogic{
             }
         }
         else{
-
+            if(player.body.velocity.x > 0){
+                player.flipX = true;
+            }
+            else{
+                player.flipX = false;
+            }
         }
 		
 		// Clamp player speed
