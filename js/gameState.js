@@ -98,6 +98,8 @@ function gameUpdate(){
             p = Phaser.Math.Between(0, 3);
             let _e = new Rider(SPAWN_LOCATION_X[p], SPAWN_LOCATION_Y[p], 0);
             enemies.add(_e, true);
+			_e.setPhysics();
+			
             if (enemies.countActive() < ENEMY_WAVE_NUMBERS[waveNumber]){
                 t_enemyPeriod = ENEMY_SPAWN_PERIOD;
             }
@@ -211,8 +213,7 @@ function gameUpdate(){
 			if (rand % 2 == 0) {
 				let pt = new Pterodactyl(0, 250);
 				pterodactyls.add(pt, true);
-				pt.body.setBounce(1, 0.25);
-				pt.body.gravity.y = 150;
+				pt.setPhysics();
 			}
 			else {
 				let pt = new Pterodactyl(800, 250);
