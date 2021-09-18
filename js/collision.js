@@ -38,7 +38,7 @@ function hitEnemy(player, enemy) {
 		}
 		
 		
-		player.body.setVelocity(-player.body.velocity.x);
+		player.body.setVelocity(-player.body.velocity.x, player.body.velocity.y);
 		
 	}
 }
@@ -71,7 +71,7 @@ function killEgg(player, egg) {
 
 function setGameOver(){
 	mainScene.physics.pause();
-	player.setTint(0xff0000);
+	player.setTintFill(0xff0000);
 	player.anims.play('turn');
 	gameOver = true;
 	scoreText.setText('Score: ' + score + '\nHit R to restart');
@@ -89,9 +89,25 @@ function playerDamage(){
 	}
 	else{
 		b_playerIsDamaged = true;
-		player.setTint(0xff0000);
+		player.setTintFill(0xff0000);
 		
 		// Kill all active pterodactyls
 		pterodactyls.children.each(pterodactyl => pterodactyl.kill());
+	}
+}
+
+function enemyEnemy(enemy1, enemy2){
+	enemy1.body.setVelocity(-enemy1.body.velocity.x, enemy1.body.velocity.y);
+	enemy2.body.setVelocity(-enemy2.body.velocity.x, enemy2.body.velocity.y);
+}
+
+function hitMount(player, mount){
+	if(pLogic.mount == -1){
+		if(player.body.y < mount.body.y - mount.body.halfHeight && player.body.velocity.y > 0){
+			pLogic.mount = mount.level;
+			mount.kill();
+			player.setTexture('rider_on_mount');
+			player.setSize(player.displayWidth*2, player.displayHeight*2);
+		}
 	}
 }

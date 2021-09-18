@@ -3,7 +3,7 @@
 // const PLAYER_STARTING_X = 260;
 // const PLAYER_STARTING_Y = 610;
 const PLAYER_STARTING_X = 888;
-const PLAYER_STARTING_Y = 800;
+const PLAYER_STARTING_Y = 765;
 const PLAYER_GRAVITY = 100;
 const PLAYER_VERTICAL_BOUNCE = 0.2;
 const PLAYER_HORIZONTAL_BOUNCE = 1;
@@ -13,14 +13,14 @@ const PLAYER_HORIZONTAL_MAX_SPEED = 300;
 const PLAYER_VERTICAL_IMPULSE_STRENGTH = 100;
 const PLAYER_MAX_LIVES = 5;
 
-const PLAYER_JUMP_STRENGTH = 300;
+const PLAYER_JUMP_STRENGTH = 500;
 
 
 class playerLogic{
     constructor(){
         this.flapstate = 0;
         this.playerLives = PLAYER_MAX_LIVES;
-		this.mount = -1;
+		this.mount = 0;
     }
 
 
@@ -60,36 +60,36 @@ class playerLogic{
         // simple state machine for 'flap'
         // when 'up' is pressed, it must be released and
         // pressed again before the next flap can happen
-        if(this.flapstate == 0){
-            if(cursor.up.isDown){
-                this.flapstate = 1;
-                player.setVelocityY(player.body.velocity.y - PLAYER_VERTICAL_IMPULSE_STRENGTH);
-                player.anims.play('flap');
+        if(this.mount != -1){
+            if(this.flapstate == 0){
+                if(cursor.up.isDown){
+                    this.flapstate = 1;
+                    player.setVelocityY(player.body.velocity.y - PLAYER_VERTICAL_IMPULSE_STRENGTH);
+                    player.anims.play('flap');
+                }
+                else{
+                    this.flapstate = 0;
+                }
+            }
+            else if(this.flapstate == 1){
+                if(cursor.up.isUp){
+                    this.flapstate = 0;
+                }
+                else{
+                    this.flapstate = 1;
+                }
             }
             else{
-                this.flapstate = 0;
+                console.log("ERROR: " + this.flapstate);
             }
-        }
-        else if(this.flapstate == 1){
-            if(cursor.up.isUp){
-                this.flapstate = 0;
-            }
-            else{
-                this.flapstate = 1;
-            }
-        }
-        else{
-            console.log("ERROR: " + this.flapstate);
         }
 		
 		// Player jumping logic
 		let spaceObj = mainScene.input.keyboard.addKey('SPACE');
-		
-		// If the space key is pressed and the player is on the ground or mounted: jump!
-		if (spaceObj.isDown && (player.body.touching.down || this.mount != -1)) {
-                player.setVelocityY(player.body.velocity.y - PLAYER_JUMP_STRENGTH);
-				this.mount = -1;
-		}
+
+        if(spaceObj.isDown){
+            this.heroJump();
+        }
     }
 
     decrementPlayerLives(){
@@ -98,7 +98,23 @@ class playerLogic{
         return this.playerLives;
     }
 
+    heroJump(){
+        if(this.mount == -1 && player.body.touching.down){
+            player.setVelocityY(player.body.velocity.y - PLAYER_JUMP_STRENGTH);
+        }
+        else if(this.mount != -1){
+            player.setTexture('rider');
+            player.setVelocityY(player.body.velocity.y - PLAYER_JUMP_STRENGTH);
+            player.setSize(player.displayWidth*2, player.displayHeight*2);
+            this.spawnMount(player.getCenter().x, player.getCenter().y-100, this.mount);
+            this.mount = -1;
+        }
+    }
 
-
+    spawnMount(x, y, level){
+        let _m = new Mount(x, y, level);
+        mounts.add(_m, true);
+        _m.setPhysics();
+    }
 
 }

@@ -17,7 +17,7 @@ const SAFETY_DURATION = 5000; //ms
 const SAFETY_FLASH_PERIOD = 100; //ms
 const PTERODACTYL_SPAWN_TIME = 8000; //ms
 const SPAWN_LOCATION_X = [625, 625, 1200, 1200];
-const SPAWN_LOCATION_Y = [790, 790, 790, 790];
+const SPAWN_LOCATION_Y = [700, 700, 700, 700];
 
 var waveNumber = 0;
 var t_waveDisplay = 0;
@@ -149,7 +149,7 @@ function gameUpdate(){
             b_playerSpawnRunning = false;
             p = Phaser.Math.Between(0,3);
             player.enableBody(true, SPAWN_LOCATION_X[p], SPAWN_LOCATION_Y[p],true, true);
-            player.clearTint();
+            player.setTintFill(0x0000ff);
             t_playerSafety = SAFETY_DURATION;
             b_playerSafetyRunning = true;
             t_playerSafetyFlash = SAFETY_FLASH_PERIOD;
@@ -174,17 +174,17 @@ function gameUpdate(){
             b_FlashTintEnabled = !b_FlashTintEnabled;
             t_playerSafetyFlash = SAFETY_FLASH_PERIOD;
             if(b_FlashTintEnabled){
-                player.setTint(0x00ff00)
+                player.setTintFill(0x00ff00)
             }
             else{
-                player.clearTint();
+                player.setTintFill(0x0000ff);
             }
         }
         if(t_playerSafety <= 0 || cursors.left.isDown || cursors.right.isDown || cursors.up.isDown){
             t_playerSafety = 0;
             b_playerSafetyRunning = false;
             t_playerSafetyFlash = 0;
-            player.clearTint();
+            player.setTintFill(0x0000ff);
             peCollision.active = true;
 			
 			// Reset pterodactyl spawning
@@ -230,8 +230,12 @@ function gameUpdate(){
     enemies.children.iterate(enemy => enemy.update(player));
 	pterodactyls.children.each(pt => pt.update(player));
     eggs.children.each(function(egg) {egg.update(player)});
+    mounts.children.each(function(mount) {mount.update()});
     mainScene.physics.world.wrap(player, 0);
     mainScene.physics.world.wrap(enemies, 0);
 	mainScene.physics.world.wrap(pterodactyls, 0);
     mainScene.physics.world.wrap(eggs, 0);
+    mainScene.physics.world.wrap(mounts, 0);
+
+    console.log('Player Mount: ' + pLogic.mount);
 }

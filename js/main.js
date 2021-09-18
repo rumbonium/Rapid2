@@ -59,7 +59,8 @@ function create ()
 {
 	gameTime = new Timer();
 	
-	mainScene.add.image(0, 0, 'background').setOrigin(0, 0).setScale(0.48);
+	var background = mainScene.add.image(0, 0, 'background').setOrigin(0, 0).setScale(0.48);
+	//
 
 	platforms = mainScene.physics.add.staticGroup();
 	lavaPlatforms = mainScene.physics.add.staticGroup();
@@ -87,7 +88,8 @@ function create ()
 	platforms.create(1450, 850, 'platform').setSize(450, 35).setOffset(60, 14);
 
 
-	player = mainScene.physics.add.sprite(PLAYER_STARTING_X, PLAYER_STARTING_Y, 'rider_on_mount').setScale(0.25);
+	var playerStartingSprite = (pLogic.mount == -1) ? 'rider' : 'rider_on_mount';
+	player = mainScene.physics.add.sprite(PLAYER_STARTING_X, PLAYER_STARTING_Y, playerStartingSprite).setScale(0.5);
 	player.setBounce(PLAYER_HORIZONTAL_BOUNCE, PLAYER_VERTICAL_BOUNCE);
 	player.setGravity(0, PLAYER_GRAVITY);
 	player.setTintFill(0x0000ff);
@@ -103,20 +105,27 @@ function create ()
 	
 	enemies = mainScene.physics.add.group();
 	pterodactyls = mainScene.physics.add.group();
+	mounts = mainScene.physics.add.group();
 
 	mainScene.physics.add.collider(enemies, platforms);
 	mainScene.physics.add.collider(eggs, platforms);
 	mainScene.physics.add.collider(player, platforms);
 	mainScene.physics.add.collider(pterodactyls, platforms);
+	mainScene.physics.add.collider(mounts, platforms);
 	mainScene.physics.add.collider(enemies, lavaPlatforms);
 	mainScene.physics.add.collider(eggs, lavaPlatforms);
 	mainScene.physics.add.collider(player, lavaPlatforms);
 	mainScene.physics.add.collider(pterodactyls, lavaPlatforms);
+	mainScene.physics.add.collider(mounts, lavaPlatforms);
 	mainScene.physics.add.collider(enemies, lava, destroy, null, this);
 	mainScene.physics.add.collider(eggs, lava, destroy, null, this);
 	mainScene.physics.add.collider(player, lava, hitLava, null, this);
 	mainScene.physics.add.collider(player, pterodactyls, hitPterodactyl, null, this);
 	
+	// mainScene.physics.add.collider(enemies, enemies);
+	mainScene.physics.add.overlap(player, mounts, hitMount, null, this);
+	// mainScene.physics.add.collider(enemies, mounts);
+
 	peCollision = mainScene.physics.add.overlap(player, enemies, hitEnemy, null, this);
 	mainScene.physics.add.overlap(player, eggs, killEgg, null, this);
 
@@ -124,7 +133,7 @@ function create ()
 
 	scoreText = mainScene.add.text(16, 16, 'Score: 0', {fontSize: '32px', fill: '#000'});
 	livesText = mainScene.add.text(800 - 400, 16, 'Lives Remaining: ' + PLAYER_MAX_LIVES, {fontSize: '32px', fill: '#000'});
-	menuText = mainScene.add.text(400, 400, 'SLAY\nHit Spacebar to Start', {fontSize: '32px', fill: '#000'});
+	menuText = mainScene.add.text(400, 400, 'SLAY\nHit Up Arrow to Start', {fontSize: '32px', fill: '#000'});
 	waveText = mainScene.add.text(300, 300, '', {fontSize: '32px', fill: '#000'});
 }
 
@@ -138,7 +147,7 @@ function update ()
 
 	//Game State Machine
 	if(gState === GAMESTATE.s_menu){
-		if(spaceObj.isDown){
+		if(cursors.up.isDown){
 			menuText.setText('');
 			gState = GAMESTATE.s_play;
 			mainScene.physics.resume();

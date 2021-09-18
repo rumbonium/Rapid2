@@ -10,13 +10,12 @@ const EGG_HATCH_TIME = [10, 8, 6];
 // as the player's upwards rate
 const ADJUST_UP_SPEED = 65;
 
-
 class Rider extends Phaser.GameObjects.Sprite {
 	constructor(x, y, difficulty) {
 		super(mainScene, x, y, 'rider_on_mount');
 		difficulty = difficulty > 2 ? 2 : difficulty;
 		
-		this.setScale(0.25);
+		this.setScale(0.5);
 		this.setTintFill(ENEMY_COLORS[difficulty]);
 		this.difficulty = difficulty;
 		this.totalUpdates = 0;
@@ -82,7 +81,7 @@ const PTERODACTYL_UPDATE_RATE = 15; //ms
 class Pterodactyl extends Phaser.GameObjects.Sprite {
 	constructor(x, y) {
 		super(mainScene, x, y, 'mount');
-		this.setScale(0.75, 0.125);
+		this.setScale(1.5, 0.25);
 		this.timeSinceUpdate = 0;
 	}
 	
@@ -146,7 +145,7 @@ const EGG_DECELERATION = 0.95;
 class Egg extends Phaser.GameObjects.Sprite {
 	constructor(x, y, difficulty) {
 		super(mainScene, x, y, 'rider');
-		this.setScale(0.25);
+		this.setScale(0.5);
 		this.setTintFill(0xff0000)
 		this.difficulty = difficulty;
 		this.hatchTime = EGG_HATCH_TIME[difficulty];
@@ -178,6 +177,32 @@ class Egg extends Phaser.GameObjects.Sprite {
 	}
 	
 	kill() {
+		this.destroy();
+	}
+}
+
+const FREE_MOUNT_SPEED = 100;
+class Mount extends Phaser.GameObjects.Sprite{
+	constructor(x, y, level){
+		super(mainScene, x, y, 'mount');
+		this.setScale(0.5);
+		// Changing the size of the hitbox is not working
+		// this.body.setSize(10, 10, true);
+		this.setTintFill(ENEMY_COLORS[level]);
+		this.level = level;
+	}
+
+	setPhysics(){
+		this.body.setBounce(1, 0);
+        var x = Phaser.Math.Between(0, 1);
+        this.body.setVelocityX((x == 0 ? -FREE_MOUNT_SPEED : FREE_MOUNT_SPEED));
+	}
+
+	update(){
+		this.flipX = (this.body.velocity.x > 0) ? true : false;
+	}
+
+	kill(){
 		this.destroy();
 	}
 }
