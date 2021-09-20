@@ -5,6 +5,7 @@ const GAMESTATE = {
 };
 
 const ENEMY_WAVE_NUMBERS = [1, 3, 5, 7, 9, 11];
+// const ENEMY_WAVE_NUMBERS = [2, 2, 2, 2, 2, 2];
 
 
 const WAVE_TEXT_DISPLAY_TIME = 2000; //ms
@@ -14,8 +15,9 @@ const ENEMY_SPAWN_TIME = 250; //ms
 const ENEMY_SPAWN_PERIOD = 300; //ms
 const SAFETY_DURATION = 5000; //ms
 const SAFETY_FLASH_PERIOD = 100; //ms
-const SPAWN_LOCATION_X = [400, 75, 650, 425];
-const SPAWN_LOCATION_Y = [610, 385, 360, 260];
+const PTERODACTYL_SPAWN_TIME = 8000; //ms
+const SPAWN_LOCATION_X = [350, 400, 1400, 1450];
+const SPAWN_LOCATION_Y = [150, 700, 700, 150];
 
 var waveNumber = 0;
 var t_waveDisplay = 0;
@@ -32,6 +34,8 @@ var t_playerSafety = 0;
 var b_playerSafetyRunning = false;
 var t_playerSafetyFlash = 0;
 var b_FlashTintEnabled = false;
+var t_pterodactylTimer = 0;
+var b_pterodactylTimerRunning = false;
 
 function gameUpdate(){
     //wave display timer
@@ -41,10 +45,15 @@ function gameUpdate(){
     //  player can move while timer runs
 
     if(!b_waveDisplayRunning && !b_enemySpawnRunning && !b_enemyPeriodRunning){
-        if(eggs.countActive() === 0 && enemies.countActive() === 0){
+        if(eggs.countActive() === 0 && enemies.countActive() === 0 && pterodactyls.countActive() === 0){
             t_waveDisplay = WAVE_TEXT_DISPLAY_TIME;
             waveNumber++;
             b_waveDisplayRunning = true;
+			
+			// Burn bridges on wave 3
+			if (waveNumber == 9) {
+				lavaPlatforms.clear(true, true);
+			}
         }
     }
 
@@ -57,6 +66,8 @@ function gameUpdate(){
             waveText.setText('');
             t_enemySpawn = ENEMY_SPAWN_TIME;
             b_enemySpawnRunning = true;
+			t_pterodactylTimer = PTERODACTYL_SPAWN_TIME;
+			b_pterodactylTimerRunning = true;
         }
     }
 
@@ -87,6 +98,8 @@ function gameUpdate(){
             p = Phaser.Math.Between(0, 3);
             let _e = new Rider(SPAWN_LOCATION_X[p], SPAWN_LOCATION_Y[p], 0);
             enemies.add(_e, true);
+			_e.setPhysics();
+			
             if (enemies.countActive() < ENEMY_WAVE_NUMBERS[waveNumber]){
                 t_enemyPeriod = ENEMY_SPAWN_PERIOD;
             }
@@ -161,28 +174,68 @@ function gameUpdate(){
             b_FlashTintEnabled = !b_FlashTintEnabled;
             t_playerSafetyFlash = SAFETY_FLASH_PERIOD;
             if(b_FlashTintEnabled){
-                player.setTint(0x00ff00)
+                player.setTintFill(0x00ff00)
             }
             else{
                 player.clearTint();
             }
         }
-        if(t_playerSafety <= 0 || cursors.left.isDown || cursors.right.isDown || cursors.up.isDown){
+        if(t_playerSafety <= 0 || cursors.left.isDown || cursors.right.isDown || spaceObj.isDown){
             t_playerSafety = 0;
             b_playerSafetyRunning = false;
             t_playerSafetyFlash = 0;
             player.clearTint();
             peCollision.active = true;
+			
+			// Reset pterodactyl spawning
+			b_pterodactylTimerRunning = true;
+			t_pterodactylTimer = PTERODACTYL_SPAWN_TIME;
         }
     }
-
+	
+	//pterodactyl spawn timer
+	//  do nothing while timer runs
+	//  when timer expires, spawn pterodactyl
+	//  timer runs only once
+	//  the timer enables itself if there are no current pterodactyls
+	
+	if (pterodactyls.countActive() === 0 && b_pterodactylTimerRunning) {
+		b_pterodactylTimerRunning = true;
+		b_pterodactylTimer = PTERODACTYL_SPAWN_TIME;
+	}
+	
+	if (b_pterodactylTimerRunning) {
+		t_pterodactylTimer -= gameTime.getDeltaTime();
+		if (t_pterodactylTimer <= 0) {
+			b_pterodactylTimerRunning = false;
+			
+			let rand = Phaser.Math.Between(0,3);
+			if (rand % 2 == 0) {
+				let pt = new Pterodactyl(0, 250);
+				pterodactyls.add(pt, true);
+				pt.setPhysics();
+			}
+			else {
+				let pt = new Pterodactyl(800, 250);
+				pterodactyls.add(pt, true);
+				pt.body.setBounce(1, 0.25);
+				pt.body.gravity.y = 150;
+			}
+		}
+	}
 
     if(!b_playerDeathPauseRunning && !b_playerSpawnRunning){
         pLogic.playerMove(player, cursors);
     }
     enemies.children.iterate(enemy => enemy.update(player));
-    eggs.children.iterate(egg => egg.update(player));
+	pterodactyls.children.each(pt => pt.update(player));
+    eggs.children.each(function(egg) {egg.update(player)});
+    mounts.children.each(function(mount) {mount.update()});
     mainScene.physics.world.wrap(player, 0);
     mainScene.physics.world.wrap(enemies, 0);
+	mainScene.physics.world.wrap(pterodactyls, 0);
     mainScene.physics.world.wrap(eggs, 0);
+    mainScene.physics.world.wrap(mounts, 0);
+
+    console.log('Player Mount: ' + pLogic.mount);
 }

@@ -1,12 +1,12 @@
 var config = {
 	type: Phaser.AUTO,
-	width: 800,
-	height: 700,
+	width: 1820,
+	height: 900,
 	physics: {
 		default: 'arcade',
 		arcade: {
 			gravity: {y: 300},
-			debug: true,
+			debug: false,
 			debugShowBody: true,
 			debugShowVelocity: true,
 			debugVelocityColor: 0xffff00,
@@ -29,16 +29,16 @@ var player;
 var gameTime;
 let pLogic = new playerLogic();
 var platforms;
+var lavaPlatforms;
 var lava;
-var stars;
 var score = 0;
 var scoreText;
 var livesText;
 var menuText;
 var waveText;
 
-var bombs;
 var enemies;
+var pterodactyls;
 var eggs;
 var eggCounter = 0;
 var gameOver = false;
@@ -47,66 +47,92 @@ var game = new Phaser.Game(config);
 function preload ()
 {
 	mainScene = this;
-	mainScene.load.image('sky', './assets/sky.png');
-	mainScene.load.image('ground', './assets/platform.png');
-	mainScene.load.image('star', './assets/star.png');
-	mainScene.load.image('bomb', './assets/bomb.png');
-	mainScene.load.spritesheet('dude', './assets/dude.png', {frameWidth: 32, frameHeight: 48});
+	mainScene.load.image('background', './assets/Slay_background.jpg');
+	mainScene.load.image('platform', './assets/platform_var_2.png');
+	mainScene.load.image('ceiling', './assets/platform.png')
+	mainScene.load.image('rider', './assets/rider.png');
+	mainScene.load.image('hero_on_mount', './assets/Slay_hero_on_mount.png');
+	mainScene.load.spritesheet('hero_stand', './assets/Slay_hero_stand.png', {frameWidth: 256, frameHeight: 256});
+	mainScene.load.spritesheet('rider_on_mount', './assets/Slay_rider_on_mount.png', {frameWidth: 256, frameHeight: 256});
+	mainScene.load.spritesheet('mount', './assets/Slay_mount.png', {frameWidth: 256, frameHeight: 256});
+	mainScene.load.spritesheet('hero_walk', './assets/Slay_hero_walk.png', {frameWidth: 256, frameHeight: 256});
+	mainScene.load.spritesheet('hero_jump', './assets/Slay_hero_jump.png', {frameWidth: 256, frameHeight: 256});
+	mainScene.load.spritesheet('queen', './assets/Slay_vampire_queen.png', {frameWidth: 945/3, frameHeight: 256});
 }
 
 function create ()
 {
 	gameTime = new Timer();
 	
-	mainScene.add.image(0, 0, 'sky').setOrigin(0, 0);
-	mainScene.add.image(0, 100, 'sky').setOrigin(0, 0);
+	var background = mainScene.add.image(0, 0, 'background').setOrigin(0, 0).setScale(0.48);
+	//
 
 	platforms = mainScene.physics.add.staticGroup();
+	lavaPlatforms = mainScene.physics.add.staticGroup();
 
-	// Bottom, Center platform
-	platforms.create(400, 668, 'ground').setScale(1, 2).refreshBody();
 	
 	// Invisible ceiling
-	platforms.create(400, -8, 'ground').setScale(2, 0.5).refreshBody();
+	platforms.create(1820/2, -10, 'ceiling').setScale(5, 0.5).refreshBody();
 	
-	// Top left platform
-	platforms.create(0, 220, 'ground').setScale(0.65, 0.85).refreshBody();
-	// Top right platform
-	platforms.create(800, 220, 'ground').setScale(0.65, 0.85).refreshBody();
-	// Top center platform
-	platforms.create(400, 300, 'ground').setScale(0.65, 0.85).refreshBody();
-	
-	// Bottom left platform
-	platforms.create(0, 425, 'ground').setScale(0.75, 0.85).refreshBody();
-	// Bottom right platform
-	platforms.create(845, 425, 'ground').setScale(0.65, 0.85).refreshBody();
-	// Bottom right offset platform
-	platforms.create(675, 400, 'ground').setScale(0.30, 0.85).refreshBody();
-	
-	// Bottom center platform
-	platforms.create(400, 450, 'ground').setScale(0.45, 0.85).refreshBody();
-	
+	lava = mainScene.physics.add.staticGroup();
+	lava.create(1820/2, 875, 'ceiling').setScale(5, 1.6).refreshBody();
+	//lava.create(700, 675, 'ceiling').setScale(0.5, 1.6).refreshBody();
+	lava.children.iterate(function(child){
+		child.setTintFill(0xff0000);
+	});
 
-	player = mainScene.physics.add.sprite(PLAYER_STARTING_X, PLAYER_STARTING_Y, 'dude');
+	// lava platforms
+	lavaPlatforms.create(50, 840, 'ceiling').setScale(0.5, 0.25).setTint(0x000000).refreshBody();
+	lavaPlatforms.create(625, 840, 'ceiling').setScale(0.5, 0.25).setTint(0x000000).refreshBody();
+	lavaPlatforms.create(1200, 840, 'ceiling').setScale(0.5, 0.25).setTint(0x000000).refreshBody();
+	lavaPlatforms.create(1775, 840, 'ceiling').setScale(0.5, 0.25).setTint(0x000000).refreshBody();
+	
+	// platforms
+	platforms.create(300, 850, 'platform').setSize(450, 35).setOffset(60, 14);
+	platforms.create(875, 850, 'platform').setSize(450, 35).setOffset(60, 14);
+	platforms.create(1450, 850, 'platform').setSize(450, 35).setOffset(60, 14);
+
+	platforms.create(300, 250, 'platform').setSize(450, 35).setOffset(60, 14);
+	platforms.create(875, 500, 'platform').setSize(450, 35).setOffset(60, 14);
+	platforms.create(1450, 250, 'platform').setSize(450, 35).setOffset(60, 14);
+
+	var playerStartingSprite = (pLogic.mount == -1) ? 'hero_stand' : 'hero_on_mount';
+	player = mainScene.physics.add.sprite(PLAYER_STARTING_X, PLAYER_STARTING_Y, playerStartingSprite).setScale(0.5);
 	player.setBounce(PLAYER_HORIZONTAL_BOUNCE, PLAYER_VERTICAL_BOUNCE);
 	player.setGravity(0, PLAYER_GRAVITY);
+	// player.setTintFill(0x0000ff);
 	
 	mainScene.anims.create({
-		key: 'left',
-		frames: mainScene.anims.generateFrameNumbers('dude', {start: 0, end: 3}),
+		key: 'flap',
+		frames: mainScene.anims.generateFrameNumbers('rider_on_mount', {frames: [3, 2, 1, 0]}),
+		frameRate: 30,
+		repeat: 0
+	});
+
+	mainScene.anims.create({
+		key: 'hero_walking', 
+		frames: mainScene.anims.generateFrameNumbers('hero_walk', {frames: [0,1,2,3]}),
 		frameRate: 10,
 		repeat: -1
 	});
 
 	mainScene.anims.create({
-		key: 'turn',
-		frames: [{key: 'dude', frame:4}],
-		frameRate: 20
+		key: 'hero_jumping',
+		frames: mainScene.anims.generateFrameNumbers('hero_jump', {frames: [0,1,2,3]}),
+		frameRate: 20,
+		repeat: 0
 	});
 
 	mainScene.anims.create({
-		key: 'right',
-		frames: mainScene.anims.generateFrameNumbers('dude', {start: 5, end: 8}),
+		key: 'hero_standing',
+		frames: mainScene.anims.generateFrameNumbers('hero_stand', {frames: [0]}),
+		frameRate: 10,
+		repeat: -1
+	});
+
+	mainScene.anims.create({
+		key: 'queen_flap',
+		frames: mainScene.anims.generateFrameNumbers('queen', {frames: [0,1,2]}),
 		frameRate: 10,
 		repeat: -1
 	});
@@ -114,21 +140,29 @@ function create ()
 	eggs = mainScene.physics.add.group();
 	
 	enemies = mainScene.physics.add.group();
-
-	lava = mainScene.physics.add.staticGroup();
-	lava.create(100, 675, 'ground').setScale(0.5, 1.6).refreshBody();
-	lava.create(700, 675, 'ground').setScale(0.5, 1.6).refreshBody();
-	lava.children.iterate(function(child){
-		child.setTintFill(0xff0000);
-	})
+	pterodactyls = mainScene.physics.add.group();
+	mounts = mainScene.physics.add.group();
 
 	mainScene.physics.add.collider(enemies, platforms);
 	mainScene.physics.add.collider(eggs, platforms);
 	mainScene.physics.add.collider(player, platforms);
+	mainScene.physics.add.collider(pterodactyls, platforms);
+	mainScene.physics.add.collider(mounts, platforms);
+	mainScene.physics.add.collider(enemies, lavaPlatforms);
+	mainScene.physics.add.collider(eggs, lavaPlatforms);
+	mainScene.physics.add.collider(player, lavaPlatforms);
+	mainScene.physics.add.collider(pterodactyls, lavaPlatforms);
+	mainScene.physics.add.collider(mounts, lavaPlatforms);
 	mainScene.physics.add.collider(enemies, lava, destroy, null, this);
 	mainScene.physics.add.collider(eggs, lava, destroy, null, this);
 	mainScene.physics.add.collider(player, lava, hitLava, null, this);
+	mainScene.physics.add.collider(player, pterodactyls, hitPterodactyl, null, this);
+	mainScene.physics.add.collider(eggs, mounts, riderMount, null, this);
 	
+	// mainScene.physics.add.collider(enemies, enemies);
+	mainScene.physics.add.overlap(player, mounts, hitMount, null, this);
+	// mainScene.physics.add.collider(enemies, mounts);
+
 	peCollision = mainScene.physics.add.overlap(player, enemies, hitEnemy, null, this);
 	mainScene.physics.add.overlap(player, eggs, killEgg, null, this);
 
@@ -136,7 +170,7 @@ function create ()
 
 	scoreText = mainScene.add.text(16, 16, 'Score: 0', {fontSize: '32px', fill: '#000'});
 	livesText = mainScene.add.text(800 - 400, 16, 'Lives Remaining: ' + PLAYER_MAX_LIVES, {fontSize: '32px', fill: '#000'});
-	menuText = mainScene.add.text(400, 400, 'SLAY\nHit Spacebar to Start', {fontSize: '32px', fill: '#000'});
+	menuText = mainScene.add.text(400, 400, 'SLAY\nHit Up Arrow to Start', {fontSize: '32px', fill: '#000'});
 	waveText = mainScene.add.text(300, 300, '', {fontSize: '32px', fill: '#000'});
 }
 
@@ -146,11 +180,11 @@ function update ()
 	//console.log(gameTime.getDeltaTime());
 	cursors = mainScene.input.keyboard.createCursorKeys();
 	var rObj = mainScene.input.keyboard.addKey('R');
-	var spaceObj = mainScene.input.keyboard.addKey('SPACE');
+	spaceObj = mainScene.input.keyboard.addKey('SPACE');
 
 	//Game State Machine
 	if(gState === GAMESTATE.s_menu){
-		if(spaceObj.isDown){
+		if(cursors.up.isDown){
 			menuText.setText('');
 			gState = GAMESTATE.s_play;
 			mainScene.physics.resume();
