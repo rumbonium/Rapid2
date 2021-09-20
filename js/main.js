@@ -146,7 +146,7 @@ function create ()
 	mainScene.physics.add.collider(enemies, platforms);
 	mainScene.physics.add.collider(eggs, platforms);
 	mainScene.physics.add.collider(player, platforms);
-	//mainScene.physics.add.collider(pterodactyls, platforms);
+	mainScene.physics.add.collider(pterodactyls, platforms);
 	mainScene.physics.add.collider(mounts, platforms);
 	mainScene.physics.add.collider(enemies, lavaPlatforms);
 	mainScene.physics.add.collider(eggs, lavaPlatforms);
