@@ -33,11 +33,13 @@ function hitEnemy(player, enemy) {
 	
 		else if (diff < -ENEMY_COLLISION_DEAD_ZONE_SIZE) {
 			//Create an egg, give it velocity
+			let egg = new Egg(enemy.getCenter().x+30, enemy.getCenter().y, enemy.difficulty);
+			eggs.add(egg, true);
+			egg.setPhysics();
+			egg.body.setVelocity(enemy.body.velocity.x, enemy.body.velocity.y);
 			
 			enemy.kill();
 	
-			score += ENEMY_SCORES[enemy.difficulty];
-			scoreText.setText('Score: ' + score);
 		}
 		else {
 			// Player on right
@@ -81,8 +83,7 @@ function destroy(toDestroy, other) {
 
 function killEgg(player, egg) {
 	if(pLogic.mount != -1){
-		score += EGG_SCORES[eggCounter];
-		eggCounter = (eggCounter >= 3) ? 3 : eggCounter + 1;
+		score += ENEMY_SCORES[egg.difficulty];
 		scoreText.setText('Score: ' + score);
 		egg.kill();
 	}
