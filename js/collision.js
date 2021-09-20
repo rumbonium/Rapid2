@@ -70,6 +70,7 @@ function hitPterodactyl(player, pterodactyl) {
 	}
 	else {
 		playerDamage();
+		pLogic.mount = -1;
 	}
 }
 

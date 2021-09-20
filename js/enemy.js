@@ -1,6 +1,6 @@
 const DIFFICULTY_TOP_SPEEDS = [100, 125, 175];
 const ENEMY_SCORES = [500, 750, 1000];
-const ENEMY_COLORS = [0xff0000, 0xffffff, 0x000000];
+const ENEMY_COLORS = [0x000000, 0x000000, 0x000000];
 // The rate that the AI will do inputs measured in frames between. Lower is faster.
 const DIFFICULTY_ADJUST_RATE = [15, 14, 13];
 const DIFFICULTY_RANGE = [200, 250, 350];
@@ -81,7 +81,7 @@ const PTERODACTYL_UPDATE_RATE = 15; //ms
 class Pterodactyl extends Phaser.GameObjects.Sprite {
 	constructor(x, y) {
 		super(mainScene, x, y, 'queen');
-		//this.setScale(1.5, 0.25);
+		this.setScale(0.5);
 		this.timeSinceUpdate = 0;
 		this.anims.play('queen_flap');
 	}
@@ -147,7 +147,7 @@ class Egg extends Phaser.GameObjects.Sprite {
 	constructor(x, y, difficulty) {
 		super(mainScene, x, y, 'rider');
 		this.setScale(0.5);
-		this.setTintFill(0xff0000)
+		// this.setTintFill(0xff0000)
 		this.difficulty = difficulty;
 		this.hatchTime = EGG_HATCH_TIME[difficulty];
 	}

@@ -4,8 +4,8 @@ const GAMESTATE = {
     s_gameOver: 's_gameOver'
 };
 
-// const ENEMY_WAVE_NUMBERS = [1, 3, 5, 7, 9, 11];
-const ENEMY_WAVE_NUMBERS = [2, 2, 2, 2, 2, 2];
+const ENEMY_WAVE_NUMBERS = [1, 3, 5, 7, 9, 11];
+// const ENEMY_WAVE_NUMBERS = [2, 2, 2, 2, 2, 2];
 
 
 const WAVE_TEXT_DISPLAY_TIME = 2000; //ms
@@ -16,8 +16,8 @@ const ENEMY_SPAWN_PERIOD = 300; //ms
 const SAFETY_DURATION = 5000; //ms
 const SAFETY_FLASH_PERIOD = 100; //ms
 const PTERODACTYL_SPAWN_TIME = 8000; //ms
-const SPAWN_LOCATION_X = [625, 625, 1200, 1200];
-const SPAWN_LOCATION_Y = [700, 700, 700, 700];
+const SPAWN_LOCATION_X = [350, 400, 1400, 1450];
+const SPAWN_LOCATION_Y = [150, 700, 700, 150];
 
 var waveNumber = 0;
 var t_waveDisplay = 0;
@@ -149,7 +149,7 @@ function gameUpdate(){
             b_playerSpawnRunning = false;
             p = Phaser.Math.Between(0,3);
             player.enableBody(true, SPAWN_LOCATION_X[p], SPAWN_LOCATION_Y[p],true, true);
-            player.setTintFill(0x0000ff);
+            player.clearTint();
             t_playerSafety = SAFETY_DURATION;
             b_playerSafetyRunning = true;
             t_playerSafetyFlash = SAFETY_FLASH_PERIOD;
@@ -177,14 +177,14 @@ function gameUpdate(){
                 player.setTintFill(0x00ff00)
             }
             else{
-                player.setTintFill(0x0000ff);
+                player.clearTint();
             }
         }
-        if(t_playerSafety <= 0 || cursors.left.isDown || cursors.right.isDown || cursors.up.isDown){
+        if(t_playerSafety <= 0 || cursors.left.isDown || cursors.right.isDown || spaceObj.isDown){
             t_playerSafety = 0;
             b_playerSafetyRunning = false;
             t_playerSafetyFlash = 0;
-            player.setTintFill(0x0000ff);
+            player.clearTint();
             peCollision.active = true;
 			
 			// Reset pterodactyl spawning

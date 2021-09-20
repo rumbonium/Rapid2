@@ -92,12 +92,15 @@ function create ()
 	platforms.create(875, 850, 'platform').setSize(450, 35).setOffset(60, 14);
 	platforms.create(1450, 850, 'platform').setSize(450, 35).setOffset(60, 14);
 
+	platforms.create(300, 250, 'platform').setSize(450, 35).setOffset(60, 14);
+	platforms.create(875, 500, 'platform').setSize(450, 35).setOffset(60, 14);
+	platforms.create(1450, 250, 'platform').setSize(450, 35).setOffset(60, 14);
 
 	var playerStartingSprite = (pLogic.mount == -1) ? 'hero_stand' : 'hero_on_mount';
 	player = mainScene.physics.add.sprite(PLAYER_STARTING_X, PLAYER_STARTING_Y, playerStartingSprite).setScale(0.5);
 	player.setBounce(PLAYER_HORIZONTAL_BOUNCE, PLAYER_VERTICAL_BOUNCE);
 	player.setGravity(0, PLAYER_GRAVITY);
-	player.setTintFill(0x0000ff);
+	// player.setTintFill(0x0000ff);
 	
 	mainScene.anims.create({
 		key: 'flap',
@@ -143,7 +146,7 @@ function create ()
 	mainScene.physics.add.collider(enemies, platforms);
 	mainScene.physics.add.collider(eggs, platforms);
 	mainScene.physics.add.collider(player, platforms);
-	mainScene.physics.add.collider(pterodactyls, platforms);
+	//mainScene.physics.add.collider(pterodactyls, platforms);
 	mainScene.physics.add.collider(mounts, platforms);
 	mainScene.physics.add.collider(enemies, lavaPlatforms);
 	mainScene.physics.add.collider(eggs, lavaPlatforms);
@@ -177,7 +180,7 @@ function update ()
 	//console.log(gameTime.getDeltaTime());
 	cursors = mainScene.input.keyboard.createCursorKeys();
 	var rObj = mainScene.input.keyboard.addKey('R');
-	var spaceObj = mainScene.input.keyboard.addKey('SPACE');
+	spaceObj = mainScene.input.keyboard.addKey('SPACE');
 
 	//Game State Machine
 	if(gState === GAMESTATE.s_menu){
