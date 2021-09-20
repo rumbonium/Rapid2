@@ -34,6 +34,15 @@ class Rider extends Phaser.GameObjects.Sprite {
 			let xDif = player.getCenter().x - this.getCenter().x;
 			let yDif = player.getCenter().y - this.getCenter().y;
 			let distance = Math.sqrt(xDif*xDif + yDif*yDif);
+			
+			let sign = Math.sign(this.body.velocity.x); // Sign of the current moving direction
+			let odds = Phaser.Math.Between(0, 100);
+			
+			// If they aren't moving, give them a nudge in a random direction
+			if (sign == 0) {
+				let randDir = odds > 50 ? 1 : -1;
+				this.body.setVelocity(randDir*DIFFICULTY_TOP_SPEEDS[this.difficulty]);
+			}
 				
 			// If the player is within a certain range, try to kill them
 			if (distance < DIFFICULTY_RANGE[this.difficulty]) {
@@ -47,21 +56,11 @@ class Rider extends Phaser.GameObjects.Sprite {
 			
 			// If the player is further away, move up and down a bit randomly
 			else {
-				let odds = Phaser.Math.Between(0, 100);
-				let sign = Math.sign(this.body.velocity.x); // Sign of the current moving direction
-				
 				// Randomly move up sometimes
 				if (odds > 60) {
 					this.body.setVelocityY(this.body.velocity.y - ADJUST_UP_SPEED);
 					this.anims.play('flap');
 				}
-				
-				// If they aren't moving, give them a nudge in a random direction
-				if (sign == 0) {
-					let randDir = odds > 50 ? 1 : -1;
-					this.body.setVelocity(randDir*DIFFICULTY_TOP_SPEEDS[this.difficulty]);
-				}
-				
 			}
 		}
 	}
@@ -78,6 +77,7 @@ class Rider extends Phaser.GameObjects.Sprite {
 const PTERODACTYL_SCORE = 1000;
 const PTERODACTYL_SPEED = 150;
 const PTERODACTYL_UPDATE_RATE = 15; //ms
+const PTERODACTYL_UP_CHANCE = 45; // The chance for the pterodactly to move up in a given tick
 class Pterodactyl extends Phaser.GameObjects.Sprite {
 	constructor(x, y) {
 		super(mainScene, x, y, 'queen');
@@ -99,16 +99,26 @@ class Pterodactyl extends Phaser.GameObjects.Sprite {
 				this.body.setVelocity(-PTERODACTYL_SPEED, 0);
 		}
 		
-		// Randomly move up sometimes
-		let odds1 = Phaser.Math.Between(0, 100);
-		if (odds1 > 45 && this.timeSinceUpdate >= PTERODACTYL_UPDATE_RATE && this.y > 100) {
-			this.body.setVelocity(this.body.velocity.x, this.body.velocity.y - 15);
+		if  (this.timeSinceUpdate >= PTERODACTYL_UPDATE_RATE) {
+			// Randomly move up sometimes
+			let odds1 = Phaser.Math.Between(0, 100);
+			
+			// If Y is near the top, move down always. At a faster rate than usual.
+			if (this.y < 100) 
+				this.body.setVelocity(this.body.velocity.x, this.body.velocity.y + 10);
+			
+			// If Y is near the lava, move up always.
+			else if (this.y > 550)
+				this.body.setVelocity(this.body.velocity.x, this.body.velocity.y - 10);
+			
+			// Randomly move up sometimes
+			else if (odds1 > PTERODACTYL_UP_CHANCE) 
+				this.body.setVelocity(this.body.velocity.x, this.body.velocity.y - 15);
+			
+			
 			this.timeSinceUpdate = 0;
 		}
 		
-		// If Y is near the lava, move up always.
-		if (this.y > 550)
-			this.body.setVelocity(this.body.velocity.x, this.body.velocity.y - 10);
 		
 		
 		// If all enemies are gone, move off screen
