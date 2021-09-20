@@ -6,41 +6,57 @@ function hitLava(player, bomb){
 }
 
 function hitEnemy(player, enemy) {
+	if(pLogic.mount == -1){ // player is not mounted - hijack or death
+		if(player.body.y < enemy.body.y - enemy.body.halfHeight && player.body.velocity.y > 0){
+			let egg = new Egg(enemy.getCenter().x+30, enemy.getCenter().y, enemy.difficulty);
+			eggs.add(egg, true);
+			egg.setPhysics();
+			egg.body.setVelocity(enemy.body.velocity.x, enemy.body.velocity.y);
 
-	let diff = player.getCenter().y - enemy.getCenter().y;
-	let direction = player.getCenter().x - enemy.getCenter().x;
-	if (diff > ENEMY_COLLISION_DEAD_ZONE_SIZE) {
-		playerDamage();
-	}
+			pLogic.mount = enemy.difficulty;
+			player.setTexture('rider_on_mount');
 
-	else if (diff < -ENEMY_COLLISION_DEAD_ZONE_SIZE) {
-		//Create an egg, give it velocity
-		let egg = new Egg(enemy.getCenter().x, enemy.getCenter().y, enemy.difficulty);
-		eggs.add(egg, true);
-		egg.setPhysics();
-		egg.body.setVelocity(enemy.body.velocity.x, enemy.body.velocity.y);
-		
-		enemy.kill();
-
-		score += ENEMY_SCORES[enemy.difficulty];
-		scoreText.setText('Score: ' + score);
-	}
-	else {
-		// Player on right
-		if (direction > 0) {
-			player.setPosition(player.x + 5, player.y);
-			// TODO: Set the enemy's movement
+			enemy.kill();
 		}
-		// Player on left
+		else{
+			playerDamage();
+		}
+	}
+	else{ // player is on a mount - regular joust
+		let diff = player.getCenter().y - enemy.getCenter().y;
+		let direction = player.getCenter().x - enemy.getCenter().x;
+		if (diff > ENEMY_COLLISION_DEAD_ZONE_SIZE) {
+			//  replace this with player losing mount
+			pLogic.mount = -1;
+			player.setTexture('hero_stand');
+		}
+	
+		else if (diff < -ENEMY_COLLISION_DEAD_ZONE_SIZE) {
+			//Create an egg, give it velocity
+			
+			enemy.kill();
+	
+			score += ENEMY_SCORES[enemy.difficulty];
+			scoreText.setText('Score: ' + score);
+		}
 		else {
-			player.setPosition(player.x - 5, player.y);
-			// TODO: Set the enemy's movement
+			// Player on right
+			if (direction > 0) {
+				player.setPosition(player.x + 5, player.y);
+				// TODO: Set the enemy's movement
+			}
+			// Player on left
+			else {
+				player.setPosition(player.x - 5, player.y);
+				// TODO: Set the enemy's movement
+			}
+			
+			
+			player.body.setVelocity(-player.body.velocity.x, player.body.velocity.y);
+			
 		}
-		
-		
-		player.body.setVelocity(-player.body.velocity.x, player.body.velocity.y);
-		
 	}
+
 }
 
 function hitPterodactyl(player, pterodactyl) {
@@ -110,4 +126,12 @@ function hitMount(player, mount){
 			player.setSize(player.displayWidth*2, player.displayHeight*2);
 		}
 	}
+}
+
+function riderMount(rider, mount){
+	let _e = new Rider(mount.body.x, mount.body.y, mount.level);
+        enemies.add(_e, true);
+		_e.setPhysics();
+		rider.kill();
+		mount.kill();
 }

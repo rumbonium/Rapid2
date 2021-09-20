@@ -6,7 +6,7 @@ var config = {
 		default: 'arcade',
 		arcade: {
 			gravity: {y: 300},
-			debug: true,
+			debug: false,
 			debugShowBody: true,
 			debugShowVelocity: true,
 			debugVelocityColor: 0xffff00,
@@ -51,8 +51,13 @@ function preload ()
 	mainScene.load.image('platform', './assets/platform_var_2.png');
 	mainScene.load.image('ceiling', './assets/platform.png')
 	mainScene.load.image('rider', './assets/rider.png');
+	mainScene.load.image('hero_on_mount', './assets/Slay_hero_on_mount.png');
+	mainScene.load.spritesheet('hero_stand', './assets/Slay_hero_stand.png', {frameWidth: 256, frameHeight: 256});
 	mainScene.load.spritesheet('rider_on_mount', './assets/Slay_rider_on_mount.png', {frameWidth: 256, frameHeight: 256});
 	mainScene.load.spritesheet('mount', './assets/Slay_mount.png', {frameWidth: 256, frameHeight: 256});
+	mainScene.load.spritesheet('hero_walk', './assets/Slay_hero_walk.png', {frameWidth: 256, frameHeight: 256});
+	mainScene.load.spritesheet('hero_jump', './assets/Slay_hero_jump.png', {frameWidth: 256, frameHeight: 256});
+	mainScene.load.spritesheet('queen', './assets/Slay_vampire_queen.png', {frameWidth: 945/3, frameHeight: 256});
 }
 
 function create ()
@@ -88,7 +93,7 @@ function create ()
 	platforms.create(1450, 850, 'platform').setSize(450, 35).setOffset(60, 14);
 
 
-	var playerStartingSprite = (pLogic.mount == -1) ? 'rider' : 'rider_on_mount';
+	var playerStartingSprite = (pLogic.mount == -1) ? 'hero_stand' : 'hero_on_mount';
 	player = mainScene.physics.add.sprite(PLAYER_STARTING_X, PLAYER_STARTING_Y, playerStartingSprite).setScale(0.5);
 	player.setBounce(PLAYER_HORIZONTAL_BOUNCE, PLAYER_VERTICAL_BOUNCE);
 	player.setGravity(0, PLAYER_GRAVITY);
@@ -99,6 +104,34 @@ function create ()
 		frames: mainScene.anims.generateFrameNumbers('rider_on_mount', {frames: [3, 2, 1, 0]}),
 		frameRate: 30,
 		repeat: 0
+	});
+
+	mainScene.anims.create({
+		key: 'hero_walking', 
+		frames: mainScene.anims.generateFrameNumbers('hero_walk', {frames: [0,1,2,3]}),
+		frameRate: 10,
+		repeat: -1
+	});
+
+	mainScene.anims.create({
+		key: 'hero_jumping',
+		frames: mainScene.anims.generateFrameNumbers('hero_jump', {frames: [0,1,2,3]}),
+		frameRate: 20,
+		repeat: 0
+	});
+
+	mainScene.anims.create({
+		key: 'hero_standing',
+		frames: mainScene.anims.generateFrameNumbers('hero_stand', {frames: [0]}),
+		frameRate: 10,
+		repeat: -1
+	});
+
+	mainScene.anims.create({
+		key: 'queen_flap',
+		frames: mainScene.anims.generateFrameNumbers('queen', {frames: [0,1,2]}),
+		frameRate: 10,
+		repeat: -1
 	});
 
 	eggs = mainScene.physics.add.group();
@@ -121,6 +154,7 @@ function create ()
 	mainScene.physics.add.collider(eggs, lava, destroy, null, this);
 	mainScene.physics.add.collider(player, lava, hitLava, null, this);
 	mainScene.physics.add.collider(player, pterodactyls, hitPterodactyl, null, this);
+	mainScene.physics.add.collider(eggs, mounts, riderMount, null, this);
 	
 	// mainScene.physics.add.collider(enemies, enemies);
 	mainScene.physics.add.overlap(player, mounts, hitMount, null, this);

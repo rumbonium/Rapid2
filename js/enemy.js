@@ -80,9 +80,10 @@ const PTERODACTYL_SPEED = 150;
 const PTERODACTYL_UPDATE_RATE = 15; //ms
 class Pterodactyl extends Phaser.GameObjects.Sprite {
 	constructor(x, y) {
-		super(mainScene, x, y, 'mount');
-		this.setScale(1.5, 0.25);
+		super(mainScene, x, y, 'queen');
+		//this.setScale(1.5, 0.25);
 		this.timeSinceUpdate = 0;
+		this.anims.play('queen_flap');
 	}
 	
 	update(player) {
@@ -153,20 +154,21 @@ class Egg extends Phaser.GameObjects.Sprite {
 	
 	update(player) {
 		// Friction
-		if (this.body.touching.down) {
-			this.body.setVelocity(this.body.velocity.x*EGG_DECELERATION, this.body.velocity.y);
-		}
+		// if (this.body.touching.down) {
+		// 	this.body.setVelocity(this.body.velocity.x*EGG_DECELERATION, this.body.velocity.y);
+			
+		// }
 		
 		// If the egg is not moving, count down on its timer to hatch
-		if (Math.abs(this.body.velocity.x) < 1)
-			this.hatchTime -= gameTime.getDeltaTimeSeconds();
+		// if (Math.abs(this.body.velocity.x) < 1)
+		// 	this.hatchTime -= gameTime.getDeltaTimeSeconds();
 		
-		if (this.hatchTime <= 0)
-			this.hatch();
+		// if (this.hatchTime <= 0)
+		// 	this.hatch();
 	}
 	
 	setPhysics() {
-		this.body.setBounce(1, 0.35);
+		this.body.setBounce(0);
 	}
 	
 	hatch() {

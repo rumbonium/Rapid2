@@ -20,13 +20,21 @@ class playerLogic{
     constructor(){
         this.flapstate = 0;
         this.playerLives = PLAYER_MAX_LIVES;
-		this.mount = 0;
+		this.mount = -1;
     }
 
 
     // Player Update Function
     // Takes a 'player' object and a 'cursors' object
     playerMove(player, cursor){
+        if(this.mount == -1){
+            player.setTexture('hero_stand');
+        }
+        else{
+            player.setTexture('hero_on_mount');
+            player.clearTint();
+        }
+
         if(cursor.left.isDown){
             player.flipX = false;
             if(player.body.touching.down){
@@ -65,7 +73,7 @@ class playerLogic{
                 if(cursor.up.isDown){
                     this.flapstate = 1;
                     player.setVelocityY(player.body.velocity.y - PLAYER_VERTICAL_IMPULSE_STRENGTH);
-                    player.anims.play('flap');
+                    // player.anims.play('flap');
                 }
                 else{
                     this.flapstate = 0;
@@ -83,7 +91,7 @@ class playerLogic{
                 console.log("ERROR: " + this.flapstate);
             }
         }
-		
+
 		// Player jumping logic
 		let spaceObj = mainScene.input.keyboard.addKey('SPACE');
 
@@ -103,7 +111,8 @@ class playerLogic{
             player.setVelocityY(player.body.velocity.y - PLAYER_JUMP_STRENGTH);
         }
         else if(this.mount != -1){
-            player.setTexture('rider');
+            // player.setTexture('hero_jump');
+            player.anims.play('hero_jumping');
             player.setVelocityY(player.body.velocity.y - PLAYER_JUMP_STRENGTH);
             player.setSize(player.displayWidth*2, player.displayHeight*2);
             this.spawnMount(player.getCenter().x, player.getCenter().y-100, this.mount);
