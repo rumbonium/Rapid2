@@ -20,6 +20,12 @@ var config = {
 	}
 };
 
+let myVideo = document.getElementById("video");
+setTimeout(begin, 33000);
+myVideo.play();
+
+
+
 var mainScene;
 var gState = GAMESTATE.s_menu;
 var b_playerIsDamaged = false;
@@ -39,7 +45,13 @@ var pterodactyls;
 var eggs;
 var eggCounter = 0;
 var gameOver = false;
-var game = new Phaser.Game(config);
+var game;
+
+function begin() {
+	myVideo.style.display = "none";
+	game = new Phaser.Game(config);
+	myVideo.remove();
+}
 
 function preload ()
 {
