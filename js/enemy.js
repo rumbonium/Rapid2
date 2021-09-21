@@ -32,6 +32,8 @@ class Rider extends Phaser.GameObjects.Sprite {
 			let sign = Math.sign(this.body.velocity.x); // Sign of the current moving direction
 			let odds = Phaser.Math.Between(0, 100);
 			
+			this.flipX = sign > 0;
+			
 			// If they aren't moving, give them a nudge in a random direction
 			if (sign == 0) {
 				let randDir = odds > 50 ? 1 : -1;
