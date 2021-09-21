@@ -74,6 +74,7 @@ class playerLogic{
                     this.flapstate = 1;
                     player.setVelocityY(player.body.velocity.y - PLAYER_VERTICAL_IMPULSE_STRENGTH);
                     // player.anims.play('flap');
+					mainScene.sound.play('wing_flap');
                 }
                 else{
                     this.flapstate = 0;

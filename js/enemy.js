@@ -66,6 +66,7 @@ class Rider extends Phaser.GameObjects.Sprite {
 	}
 	
 	kill() {
+		mainScene.sound.play('enemy_kill');
 		this.destroy();
 	}
 }

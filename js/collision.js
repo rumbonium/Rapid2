@@ -89,6 +89,7 @@ function killEgg(player, egg) {
 }
 
 function setGameOver(){
+	mainScene.sound.play('player_loss');
 	mainScene.physics.pause();
 	player.setTintFill(0xff0000);
 	player.anims.play('turn');
@@ -97,6 +98,7 @@ function setGameOver(){
 }
 
 function playerDamage(){
+	mainScene.sound.play('player_death');
 	if (pLogic.mount>0) {
 		// TODO: Create a new mount
 		

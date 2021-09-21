@@ -58,6 +58,15 @@ function preload ()
 	mainScene.load.spritesheet('hero_walk', './assets/Slay_hero_walk.png', {frameWidth: 256, frameHeight: 256});
 	mainScene.load.spritesheet('hero_jump', './assets/Slay_hero_jump.png', {frameWidth: 256, frameHeight: 256});
 	mainScene.load.spritesheet('queen', './assets/Slay_vampire_queen.png', {frameWidth: 945/3, frameHeight: 256});
+	
+	// Load SFX
+	mainScene.load.audio('bg_music', './assets/sfx/SLAY_BG_Music.wav');
+	mainScene.load.audio('enemy_kill', './assets/sfx/enemy_killed.wav');
+	mainScene.load.audio('enemy_loss', './assets/sfx/enemy_loss.wav');
+	mainScene.load.audio('player_death', './assets/sfx/player_death.wav');
+	mainScene.load.audio('player_loss', './assets/sfx/player_loss.wav');
+	mainScene.load.audio('wing_flap', './assets/sfx/wing_flap.wav');
+	
 }
 
 function create ()
@@ -172,12 +181,18 @@ function create ()
 	livesText = mainScene.add.text(800 - 400, 16, 'Lives Remaining: ' + PLAYER_MAX_LIVES, {fontSize: '32px', fill: '#000'});
 	menuText = mainScene.add.text(400, 400, 'SLAY\nHit Up Arrow to Start', {fontSize: '32px', fill: '#000'});
 	waveText = mainScene.add.text(300, 300, '', {fontSize: '32px', fill: '#000'});
+	
+	// Initialize audio
+	var music = this.sound.add('bg_music');
+	music.setLoop(true);
+	music.play();
+	
 }
 
 function update ()
 {
 	gameTime.update();
-	//console.log(gameTime.getDeltaTime());
+	
 	cursors = mainScene.input.keyboard.createCursorKeys();
 	var rObj = mainScene.input.keyboard.addKey('R');
 	spaceObj = mainScene.input.keyboard.addKey('SPACE');
