@@ -44,15 +44,11 @@ var b_enemyIframesRunning = false;
 var t_playerIframes = 0;
 var b_playerIframesRunning = false;
 
-// last recorded score - required so that we don't load images EVERY Frame
-var lastScore;
+
 
 function gameUpdate(){
-	// if the last score is different, update the score images
-	if (lastScore != score) {
-		lastScore = score;
-		updateScoreText();
-	}
+	// Update the font manager
+	updateScoreText();
 	
     //wave display timer
     //  start timer if no enemies or eggs exist
