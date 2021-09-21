@@ -1,7 +1,7 @@
 const ENEMY_SCORES = [500, 750, 1000];
 const ENEMY_COLORS = [0x000000, 0x000000, 0x000000];
 const ENEMY_FLAP_AMOUNT = 100; // How much they can move in a single update - probably the same as the player's upwards rate
-const ENEMY_UPDATE_DELAY = [14, 13, 13]; // The delay (ms) between AI actions
+const ENEMY_UPDATE_DELAY = [11, 13, 13]; // The delay (ms) between AI actions
 const ENEMY_TOP_SPEEDS = [100, 125, 175];
 const ENEMY_RANGE = [200, 250, 350];
 class Rider extends Phaser.GameObjects.Sprite {
