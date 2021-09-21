@@ -33,10 +33,6 @@ var platforms;
 var lavaPlatforms;
 var lava;
 var score = 0;
-var scoreText;
-var livesText;
-var menuText;
-var waveText;
 
 var enemies;
 var pterodactyls;
@@ -52,6 +48,7 @@ function preload ()
 	mainScene.load.image('platform', './assets/platform_var_2.png');
 	mainScene.load.image('ceiling', './assets/platform.png')
 	mainScene.load.image('rider', './assets/rider.png');
+
 	mainScene.load.spritesheet('hero_on_mount', './assets/Slay_hero_mount.png', {frameWidth: 337.5, frameHeight: 281});
 	mainScene.load.spritesheet('hero_stand', './assets/Slay_hero_stand.png', {frameWidth: 256, frameHeight: 256});
 	mainScene.load.spritesheet('rider_on_mount', './assets/Slay_rider_on_mount.png', {frameWidth: 256, frameHeight: 256});
@@ -59,6 +56,25 @@ function preload ()
 	mainScene.load.spritesheet('hero_walk', './assets/Slay_hero_walk.png', {frameWidth: 1076/4, frameHeight: 256});
 	mainScene.load.spritesheet('hero_jump', './assets/Slay_hero_jump.png', {frameWidth: 1079/4, frameHeight: 259});
 	mainScene.load.spritesheet('queen', './assets/Slay_vampire_queen.png', {frameWidth: 1020/3, frameHeight: 256});
+
+	// Load font images
+	for (let i=0; i<10; i++) {
+		mainScene.load.image('font_' + i, './assets/fonts/' + i + '.png');
+	}
+	mainScene.load.image('font_lives', './assets/fonts/lives.png');
+	mainScene.load.image('font_score', './assets/fonts/score.png');
+	mainScene.load.image('font_waves', './assets/fonts/wave.png');
+	
+	
+	// Load SFX
+	mainScene.load.audio('bg_music', './assets/sfx/SLAY_BG_Music.wav');
+	mainScene.load.audio('enemy_kill', './assets/sfx/enemy_killed.wav');
+	mainScene.load.audio('enemy_loss', './assets/sfx/enemy_loss.wav');
+	mainScene.load.audio('player_death', './assets/sfx/player_death.wav');
+	mainScene.load.audio('player_loss', './assets/sfx/player_loss.wav');
+	mainScene.load.audio('wing_flap', './assets/sfx/wing_flap.wav');
+	
+
 }
 
 function create ()
@@ -173,16 +189,20 @@ function create ()
 
 	mainScene.physics.pause();
 
-	scoreText = mainScene.add.text(16, 16, 'Score: 0', {fontSize: '32px', fill: '#000'});
-	livesText = mainScene.add.text(800 - 400, 16, 'Lives Remaining: ' + PLAYER_MAX_LIVES, {fontSize: '32px', fill: '#000'});
-	menuText = mainScene.add.text(400, 400, 'SLAY\nHit Up Arrow to Start', {fontSize: '32px', fill: '#000'});
-	waveText = mainScene.add.text(300, 300, '', {fontSize: '32px', fill: '#000'});
+	// Put all font images on screen including text, lives, waves etc.
+	initializeFontManager();
+	
+	// Initialize audio
+	var music = this.sound.add('bg_music');
+	music.setLoop(true);
+	music.play();
+	
 }
 
 function update ()
 {
 	gameTime.update();
-	//console.log(gameTime.getDeltaTime());
+	
 	cursors = mainScene.input.keyboard.createCursorKeys();
 	var rObj = mainScene.input.keyboard.addKey('R');
 	spaceObj = mainScene.input.keyboard.addKey('SPACE');

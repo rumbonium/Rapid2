@@ -77,6 +77,8 @@ class playerLogic{
                     this.flapstate = 1;
                     player.setVelocityY(player.body.velocity.y - PLAYER_VERTICAL_IMPULSE_STRENGTH);
                     player.anims.play('hero_flap');
+					mainScene.sound.play('wing_flap');
+
                 }
                 else{
                     this.flapstate = 0;
@@ -105,7 +107,7 @@ class playerLogic{
 
     decrementPlayerLives(){
         this.playerLives--;
-        livesText.setText('Lives Remaining: ' + this.playerLives);
+		updateLivesText();
         return this.playerLives;
     }
 

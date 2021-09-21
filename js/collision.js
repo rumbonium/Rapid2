@@ -47,7 +47,6 @@ function hitEnemy(player, enemy) {
 			t_enemyIframes = ENEMY_IFRAMES;
 
 			enemy.kill();
-	
 		}
 		else {
 			// Player on right
@@ -92,20 +91,20 @@ function destroy(toDestroy, other) {
 function killEgg(player, egg) {
 	if(pLogic.mount != -1){
 		score += ENEMY_SCORES[egg.difficulty];
-		scoreText.setText('Score: ' + score);
 		egg.kill();
 	}
 }
 
 function setGameOver(){
+	mainScene.sound.play('player_loss');
 	mainScene.physics.pause();
 	player.setTintFill(0xff0000);
 	player.anims.play('turn');
 	gameOver = true;
-	scoreText.setText('Score: ' + score + '\nHit R to restart');
 }
 
 function playerDamage(){
+	mainScene.sound.play('player_death');
 	if (pLogic.mount>0) {
 		// TODO: Create a new mount
 		
