@@ -14,7 +14,7 @@ function hitEnemy(player, enemy) {
 			egg.body.setVelocity(enemy.body.velocity.x, enemy.body.velocity.y);
 
 			pLogic.mount = enemy.difficulty;
-			player.setTexture('rider_on_mount');
+			player.setTexture('hero_on_mount');
 
 			enemy.kill();
 		}
@@ -126,7 +126,7 @@ function hitMount(player, mount){
 		if(player.body.y < mount.body.y - mount.body.halfHeight && player.body.velocity.y > 0){
 			pLogic.mount = mount.level;
 			mount.kill();
-			player.setTexture('rider_on_mount');
+			player.setTexture('hero_on_mount');
 			player.setSize(player.displayWidth*2, player.displayHeight*2);
 		}
 	}

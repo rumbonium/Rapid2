@@ -27,13 +27,13 @@ class playerLogic{
     // Player Update Function
     // Takes a 'player' object and a 'cursors' object
     playerMove(player, cursor){
-        if(this.mount == -1){
-            player.setTexture('hero_stand');
-        }
-        else{
-            player.setTexture('hero_on_mount');
-            player.clearTint();
-        }
+        // if(this.mount == -1){
+        //     player.setTexture('hero_stand');
+        // }
+        // else{
+        //     player.setTexture('hero_on_mount');
+        //     player.clearTint();
+        // }
 
         if(cursor.left.isDown){
             player.flipX = false;
@@ -73,7 +73,7 @@ class playerLogic{
                 if(cursor.up.isDown){
                     this.flapstate = 1;
                     player.setVelocityY(player.body.velocity.y - PLAYER_VERTICAL_IMPULSE_STRENGTH);
-                    // player.anims.play('flap');
+                    player.anims.play('hero_flap');
                 }
                 else{
                     this.flapstate = 0;

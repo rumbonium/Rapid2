@@ -51,7 +51,9 @@ function preload ()
 	mainScene.load.image('platform', './assets/platform_var_2.png');
 	mainScene.load.image('ceiling', './assets/platform.png')
 	mainScene.load.image('rider', './assets/rider.png');
-	mainScene.load.image('hero_on_mount', './assets/Slay_hero_on_mount.png');
+	// mainScene.load.image('hero_on_mount', './assets/Slay_hero_on_mount.png');
+	mainScene.load.spritesheet('hero_on_mount', './assets/Slay_hero_mount.png', {frameWidth: 337.5, frameHeight: 281});
+
 	mainScene.load.spritesheet('hero_stand', './assets/Slay_hero_stand.png', {frameWidth: 256, frameHeight: 256});
 	mainScene.load.spritesheet('rider_on_mount', './assets/Slay_rider_on_mount.png', {frameWidth: 256, frameHeight: 256});
 	mainScene.load.spritesheet('mount', './assets/Slay_mount.png', {frameWidth: 256, frameHeight: 256});
@@ -65,7 +67,6 @@ function create ()
 	gameTime = new Timer();
 	
 	var background = mainScene.add.image(0, 0, 'background').setOrigin(0, 0).setScale(0.48);
-	//
 
 	platforms = mainScene.physics.add.staticGroup();
 	lavaPlatforms = mainScene.physics.add.staticGroup();
@@ -128,6 +129,13 @@ function create ()
 		frames: mainScene.anims.generateFrameNumbers('hero_stand', {frames: [0]}),
 		frameRate: 10,
 		repeat: -1
+	});
+
+	mainScene.anims.create({
+		key: 'hero_flap',
+		frames: mainScene.anims.generateFrameNumbers('hero_on_mount', {frames: [3, 2, 1, 0]}),
+		frameRate: 30,
+		repeat: 0
 	});
 
 	mainScene.anims.create({
