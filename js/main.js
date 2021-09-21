@@ -58,6 +58,8 @@ function preload ()
 	mainScene.load.spritesheet('hero_walk', './assets/Slay_hero_walk.png', {frameWidth: 256, frameHeight: 256});
 	mainScene.load.spritesheet('hero_jump', './assets/Slay_hero_jump.png', {frameWidth: 256, frameHeight: 256});
 	mainScene.load.spritesheet('queen', './assets/Slay_vampire_queen.png', {frameWidth: 945/3, frameHeight: 256});
+	
+	mainScene.load.audio('sample', './assets/sfx/sample.mp3');
 }
 
 function create ()
@@ -174,8 +176,14 @@ function create ()
 	waveText = mainScene.add.text(300, 300, '', {fontSize: '32px', fill: '#000'});
 }
 
+var soundPlay = false;
 function update ()
 {
+	if (!soundPlay) {
+		mainScene.sound.play('sample');
+		soundPlay = true;
+	}
+	
 	gameTime.update();
 	//console.log(gameTime.getDeltaTime());
 	cursors = mainScene.input.keyboard.createCursorKeys();
