@@ -32,10 +32,6 @@ var platforms;
 var lavaPlatforms;
 var lava;
 var score = 0;
-var scoreText;
-var livesText;
-var menuText;
-var waveText;
 
 var enemies;
 var pterodactyls;
@@ -52,6 +48,15 @@ function preload ()
 	mainScene.load.image('ceiling', './assets/platform.png')
 	mainScene.load.image('rider', './assets/rider.png');
 	mainScene.load.image('hero_on_mount', './assets/Slay_hero_on_mount.png');
+	
+	// Load font images
+	for (let i=0; i<10; i++) {
+		mainScene.load.image('font_' + i, './assets/fonts/' + i + '.png');
+	}
+	mainScene.load.image('font_lives', './assets/fonts/lives.png');
+	mainScene.load.image('font_score', './assets/fonts/score.png');
+	mainScene.load.image('font_waves', './assets/fonts/wave.png');
+	
 	mainScene.load.spritesheet('hero_stand', './assets/Slay_hero_stand.png', {frameWidth: 256, frameHeight: 256});
 	mainScene.load.spritesheet('rider_on_mount', './assets/Slay_rider_on_mount.png', {frameWidth: 256, frameHeight: 256});
 	mainScene.load.spritesheet('mount', './assets/Slay_mount.png', {frameWidth: 256, frameHeight: 256});
@@ -177,10 +182,8 @@ function create ()
 
 	mainScene.physics.pause();
 
-	scoreText = mainScene.add.text(16, 16, 'Score: 0', {fontSize: '32px', fill: '#000'});
-	livesText = mainScene.add.text(800 - 400, 16, 'Lives Remaining: ' + PLAYER_MAX_LIVES, {fontSize: '32px', fill: '#000'});
-	menuText = mainScene.add.text(400, 400, 'SLAY\nHit Up Arrow to Start', {fontSize: '32px', fill: '#000'});
-	waveText = mainScene.add.text(300, 300, '', {fontSize: '32px', fill: '#000'});
+	// Put all font images on screen including text, lives, waves etc.
+	initializeFontManager();
 	
 	// Initialize audio
 	var music = this.sound.add('bg_music');

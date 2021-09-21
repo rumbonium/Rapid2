@@ -103,7 +103,7 @@ class playerLogic{
 
     decrementPlayerLives(){
         this.playerLives--;
-        livesText.setText('Lives Remaining: ' + this.playerLives);
+		updateLivesText();
         return this.playerLives;
     }
 

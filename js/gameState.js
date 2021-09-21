@@ -37,7 +37,16 @@ var b_FlashTintEnabled = false;
 var t_pterodactylTimer = 0;
 var b_pterodactylTimerRunning = false;
 
+// last recorded score - required so that we don't load images EVERY Frame
+var lastScore;
+
 function gameUpdate(){
+	// if the last score is different, update the score images
+	if (lastScore != score) {
+		lastScore = score;
+		updateScoreText();
+	}
+	
     //wave display timer
     //  start timer if no enemies or eggs exist
     //  display text while timer is running
@@ -58,12 +67,13 @@ function gameUpdate(){
     }
 
     if(t_waveDisplay > 0){
-        waveText.setText('Wave ' + waveNumber);
+		
+        enableWaveText();
         t_waveDisplay -= gameTime.getDeltaTime();
         if(t_waveDisplay <= 0){
             t_waveDisplay = 0;
             b_waveDisplayRunning = false;
-            waveText.setText('');
+            disableWaveText();
             t_enemySpawn = ENEMY_SPAWN_TIME;
             b_enemySpawnRunning = true;
 			t_pterodactylTimer = PTERODACTYL_SPAWN_TIME;

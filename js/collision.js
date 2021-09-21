@@ -37,7 +37,6 @@ function hitEnemy(player, enemy) {
 			enemy.kill();
 	
 			score += ENEMY_SCORES[enemy.difficulty];
-			scoreText.setText('Score: ' + score);
 		}
 		else {
 			// Player on right
@@ -83,7 +82,6 @@ function killEgg(player, egg) {
 	if(pLogic.mount != -1){
 		score += EGG_SCORES[eggCounter];
 		eggCounter = (eggCounter >= 3) ? 3 : eggCounter + 1;
-		scoreText.setText('Score: ' + score);
 		egg.kill();
 	}
 }
@@ -94,7 +92,6 @@ function setGameOver(){
 	player.setTintFill(0xff0000);
 	player.anims.play('turn');
 	gameOver = true;
-	scoreText.setText('Score: ' + score + '\nHit R to restart');
 }
 
 function playerDamage(){
