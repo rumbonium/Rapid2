@@ -193,7 +193,7 @@ class Egg extends Phaser.GameObjects.Sprite {
 	}
 }
 
-const FREE_MOUNT_SPEED = 100;
+const FREE_MOUNT_SPEED = 200;
 class Mount extends Phaser.GameObjects.Sprite{
 	constructor(x, y, level){
 		super(mainScene, x, y, 'mount');
