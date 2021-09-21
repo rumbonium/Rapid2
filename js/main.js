@@ -52,14 +52,12 @@ function preload ()
 	mainScene.load.image('platform', './assets/platform_var_2.png');
 	mainScene.load.image('ceiling', './assets/platform.png')
 	mainScene.load.image('rider', './assets/rider.png');
-	// mainScene.load.image('hero_on_mount', './assets/Slay_hero_on_mount.png');
 	mainScene.load.spritesheet('hero_on_mount', './assets/Slay_hero_mount.png', {frameWidth: 337.5, frameHeight: 281});
-
 	mainScene.load.spritesheet('hero_stand', './assets/Slay_hero_stand.png', {frameWidth: 256, frameHeight: 256});
 	mainScene.load.spritesheet('rider_on_mount', './assets/Slay_rider_on_mount.png', {frameWidth: 256, frameHeight: 256});
 	mainScene.load.spritesheet('mount', './assets/Slay_mount.png', {frameWidth: 256, frameHeight: 256});
-	mainScene.load.spritesheet('hero_walk', './assets/Slay_hero_walk.png', {frameWidth: 256, frameHeight: 256});
-	mainScene.load.spritesheet('hero_jump', './assets/Slay_hero_jump.png', {frameWidth: 256, frameHeight: 256});
+	mainScene.load.spritesheet('hero_walk', './assets/Slay_hero_walk.png', {frameWidth: 1076/4, frameHeight: 256});
+	mainScene.load.spritesheet('hero_jump', './assets/Slay_hero_jump.png', {frameWidth: 1079/4, frameHeight: 259});
 	mainScene.load.spritesheet('queen', './assets/Slay_vampire_queen.png', {frameWidth: 1020/3, frameHeight: 256});
 }
 

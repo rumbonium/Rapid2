@@ -118,6 +118,7 @@ function playerDamage(){
 	else{
 		b_playerIsDamaged = true;
 		player.setTintFill(0xff0000);
+		player.setTexture('hero_stand');
 		
 		// Kill all active pterodactyls
 		pterodactyls.children.each(pterodactyl => pterodactyl.kill());
