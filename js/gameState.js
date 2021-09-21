@@ -19,6 +19,9 @@ const PTERODACTYL_SPAWN_TIME = 8000; //ms
 const SPAWN_LOCATION_X = [350, 400, 1400, 1450];
 const SPAWN_LOCATION_Y = [150, 700, 700, 150];
 
+const ENEMY_IFRAMES = 2000; //ms
+const PLAYER_IFRAMES = 2000; //ms
+
 var waveNumber = 0;
 var t_waveDisplay = 0;
 var b_waveDisplayRunning = false;
@@ -36,6 +39,10 @@ var t_playerSafetyFlash = 0;
 var b_FlashTintEnabled = false;
 var t_pterodactylTimer = 0;
 var b_pterodactylTimerRunning = false;
+var t_enemyIframes = 0;
+var b_enemyIframesRunning = false;
+var t_playerIframes = 0;
+var b_playerIframesRunning = false;
 
 function gameUpdate(){
     //wave display timer
@@ -223,6 +230,26 @@ function gameUpdate(){
 			}
 		}
 	}
+
+    if(b_enemyIframesRunning){
+        prCollision.active = false;
+        t_enemyIframes -= gameTime.getDeltaTime();
+        if(t_enemyIframes <= 0){
+            prCollision.active = true;
+            t_enemyIframes = 0;
+            b_enemyIframesRunning = false;
+        }
+    }
+
+    if(b_playerIframesRunning){
+        peCollision.active = false;
+        t_playerIframes -= gameTime.getDeltaTime();
+        if(t_playerIframes <= 0){
+            peCollision.active = true;
+            t_playerIframes = 0;
+            b_playerIframesRunning = false;
+        }
+    }
 
     if(!b_playerDeathPauseRunning && !b_playerSpawnRunning){
         pLogic.playerMove(player, cursors);

@@ -16,6 +16,8 @@ function hitEnemy(player, enemy) {
 			pLogic.mount = enemy.difficulty;
 			player.setTexture('hero_on_mount');
 
+			b_enemyIframesRunning = true;
+			t_enemyIframes = ENEMY_IFRAMES;
 			enemy.kill();
 		}
 		else{
@@ -28,7 +30,10 @@ function hitEnemy(player, enemy) {
 		if (diff > ENEMY_COLLISION_DEAD_ZONE_SIZE) {
 			//  replace this with player losing mount
 			pLogic.mount = -1;
+			b_playerIframesRunning = true;
+			t_playerIframes = PLAYER_IFRAMES;
 			player.setTexture('hero_stand');
+			player.body.position.y -= 20;
 		}
 	
 		else if (diff < -ENEMY_COLLISION_DEAD_ZONE_SIZE) {
@@ -38,6 +43,9 @@ function hitEnemy(player, enemy) {
 			egg.setPhysics();
 			egg.body.setVelocity(enemy.body.velocity.x, enemy.body.velocity.y);
 			
+			b_enemyIframesRunning = true;
+			t_enemyIframes = ENEMY_IFRAMES;
+
 			enemy.kill();
 	
 		}

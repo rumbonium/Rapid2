@@ -6,7 +6,7 @@ var config = {
 		default: 'arcade',
 		arcade: {
 			gravity: {y: 300},
-			debug: false,
+			debug: true,
 			debugShowBody: true,
 			debugShowVelocity: true,
 			debugVelocityColor: 0xffff00,
@@ -24,6 +24,7 @@ var mainScene;
 var gState = GAMESTATE.s_menu;
 var b_playerIsDamaged = false;
 var peCollision;
+var prCollision;
 
 var player;
 var gameTime;
@@ -59,7 +60,7 @@ function preload ()
 	mainScene.load.spritesheet('mount', './assets/Slay_mount.png', {frameWidth: 256, frameHeight: 256});
 	mainScene.load.spritesheet('hero_walk', './assets/Slay_hero_walk.png', {frameWidth: 256, frameHeight: 256});
 	mainScene.load.spritesheet('hero_jump', './assets/Slay_hero_jump.png', {frameWidth: 256, frameHeight: 256});
-	mainScene.load.spritesheet('queen', './assets/Slay_vampire_queen.png', {frameWidth: 945/3, frameHeight: 256});
+	mainScene.load.spritesheet('queen', './assets/Slay_vampire_queen.png', {frameWidth: 1020/3, frameHeight: 256});
 }
 
 function create ()
@@ -67,6 +68,7 @@ function create ()
 	gameTime = new Timer();
 	
 	var background = mainScene.add.image(0, 0, 'background').setOrigin(0, 0).setScale(0.48);
+	// background.setTint('0xff0000');
 
 	platforms = mainScene.physics.add.staticGroup();
 	lavaPlatforms = mainScene.physics.add.staticGroup();
@@ -166,13 +168,10 @@ function create ()
 	mainScene.physics.add.collider(player, lava, hitLava, null, this);
 	mainScene.physics.add.collider(player, pterodactyls, hitPterodactyl, null, this);
 	mainScene.physics.add.collider(eggs, mounts, riderMount, null, this);
-	
-	// mainScene.physics.add.collider(enemies, enemies);
 	mainScene.physics.add.overlap(player, mounts, hitMount, null, this);
-	// mainScene.physics.add.collider(enemies, mounts);
 
 	peCollision = mainScene.physics.add.overlap(player, enemies, hitEnemy, null, this);
-	mainScene.physics.add.overlap(player, eggs, killEgg, null, this);
+	prCollision = mainScene.physics.add.overlap(player, eggs, killEgg, null, this);
 
 	mainScene.physics.pause();
 
