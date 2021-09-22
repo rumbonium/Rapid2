@@ -27,16 +27,8 @@ class playerLogic{
     // Player Update Function
     // Takes a 'player' object and a 'cursors' object
     playerMove(player, cursor){
-        if(this.mount == -1){
-            player.setTexture('hero_stand');
-        }
-        else{
-            player.setTexture('hero_on_mount');
-            player.clearTint();
-        }
-
         if(cursor.left.isDown){
-            player.flipX = false;
+            // player.flipX = false;
             if(player.body.touching.down){
                 player.setVelocityX(player.body.velocity.x - PLAYER_GROUND_ACCELERATION);
             }
@@ -45,7 +37,7 @@ class playerLogic{
             }
         }
         else if(cursor.right.isDown){
-            player.flipX = true;
+            // player.flipX = true;
             if(player.body.touching.down){
                 player.setVelocityX(player.body.velocity.x + PLAYER_GROUND_ACCELERATION);
             }
@@ -54,14 +46,25 @@ class playerLogic{
             }
         }
         else{
-            if(player.body.velocity.x > 0){
-                player.flipX = true;
-            }
-            else{
-                player.flipX = false;
-            }
+
         }
 		
+        if(player.body.velocity.x > 0){
+            player.flipX = true;
+        }
+        else{
+            player.flipX = false;
+        }
+
+        if(player.body.touching.down && this.mount == -1 && player.body.velocity.x != 0){
+            player.anims.play('hero_walking', true);
+        }
+        else if(!player.body.touching.down && this.mount == -1 && player.body.velocity.y > 0){
+            player.anims.stop();
+            player.setTexture('hero_jump', 3);
+        }
+
+
 		// Clamp player speed
 		player.body.velocity.x = Phaser.Math.Clamp(player.body.velocity.x, -PLAYER_HORIZONTAL_MAX_SPEED, PLAYER_HORIZONTAL_MAX_SPEED);
    
@@ -73,7 +76,9 @@ class playerLogic{
                 if(cursor.up.isDown){
                     this.flapstate = 1;
                     player.setVelocityY(player.body.velocity.y - PLAYER_VERTICAL_IMPULSE_STRENGTH);
-                    // player.anims.play('flap');
+                    player.anims.play('hero_flap');
+					mainScene.sound.play('wing_flap');
+
                 }
                 else{
                     this.flapstate = 0;
@@ -102,16 +107,16 @@ class playerLogic{
 
     decrementPlayerLives(){
         this.playerLives--;
-        livesText.setText('Lives Remaining: ' + this.playerLives);
+		updateLivesText();
         return this.playerLives;
     }
 
     heroJump(){
         if(this.mount == -1 && player.body.touching.down){
             player.setVelocityY(player.body.velocity.y - PLAYER_JUMP_STRENGTH);
+            player.anims.play('hero_jumping');
         }
         else if(this.mount != -1){
-            // player.setTexture('hero_jump');
             player.anims.play('hero_jumping');
             player.setVelocityY(player.body.velocity.y - PLAYER_JUMP_STRENGTH);
             player.setSize(player.displayWidth*2, player.displayHeight*2);

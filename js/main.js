@@ -20,10 +20,17 @@ var config = {
 	}
 };
 
+let myVideo = document.getElementById("video");
+setTimeout(begin, 33500);
+
+myVideo.play();
+
+
 var mainScene;
 var gState = GAMESTATE.s_menu;
 var b_playerIsDamaged = false;
 var peCollision;
+var prCollision;
 
 var player;
 var gameTime;
@@ -32,17 +39,20 @@ var platforms;
 var lavaPlatforms;
 var lava;
 var score = 0;
-var scoreText;
-var livesText;
-var menuText;
-var waveText;
 
 var enemies;
 var pterodactyls;
 var eggs;
 var eggCounter = 0;
 var gameOver = false;
-var game = new Phaser.Game(config);
+var music;
+var game;
+
+function begin() {
+	myVideo.style.display = "none";
+	game = new Phaser.Game(config);
+	myVideo.remove();
+}
 
 function preload ()
 {
@@ -51,13 +61,36 @@ function preload ()
 	mainScene.load.image('platform', './assets/platform_var_2.png');
 	mainScene.load.image('ceiling', './assets/platform.png')
 	mainScene.load.image('rider', './assets/rider.png');
-	mainScene.load.image('hero_on_mount', './assets/Slay_hero_on_mount.png');
+
+	mainScene.load.spritesheet('hero_on_mount', './assets/Slay_hero_mount.png', {frameWidth: 337.5, frameHeight: 281});
 	mainScene.load.spritesheet('hero_stand', './assets/Slay_hero_stand.png', {frameWidth: 256, frameHeight: 256});
 	mainScene.load.spritesheet('rider_on_mount', './assets/Slay_rider_on_mount.png', {frameWidth: 256, frameHeight: 256});
 	mainScene.load.spritesheet('mount', './assets/Slay_mount.png', {frameWidth: 256, frameHeight: 256});
-	mainScene.load.spritesheet('hero_walk', './assets/Slay_hero_walk.png', {frameWidth: 256, frameHeight: 256});
-	mainScene.load.spritesheet('hero_jump', './assets/Slay_hero_jump.png', {frameWidth: 256, frameHeight: 256});
-	mainScene.load.spritesheet('queen', './assets/Slay_vampire_queen.png', {frameWidth: 945/3, frameHeight: 256});
+	mainScene.load.spritesheet('hero_walk', './assets/Slay_hero_walk.png', {frameWidth: 1076/4, frameHeight: 256});
+	mainScene.load.spritesheet('hero_jump', './assets/Slay_hero_jump.png', {frameWidth: 1079/4, frameHeight: 259});
+	mainScene.load.spritesheet('queen', './assets/Slay_vampire_queen.png', {frameWidth: 1020/3, frameHeight: 256});
+
+	// Load font images
+	for (let i=0; i<10; i++) {
+		mainScene.load.image('font_' + i, './assets/fonts/' + i + '.png');
+	}
+	mainScene.load.image('font_lives', './assets/fonts/lives.png');
+	mainScene.load.image('font_score', './assets/fonts/score.png');
+	mainScene.load.image('font_waves', './assets/fonts/wave.png');
+	mainScene.load.image('font_start', './assets/fonts/Slay_spacebar_instructions.png');
+	mainScene.load.image('font_restart', './assets/fonts/Slay_restart_instructions.png');
+	mainScene.load.image('font_logo', './assets/fonts/Slay_logo.png');
+	
+	
+	// Load SFX
+	mainScene.load.audio('bg_music', './assets/sfx/SLAY_BG_Music.wav');
+	mainScene.load.audio('enemy_kill', './assets/sfx/enemy_killed.wav');
+	mainScene.load.audio('enemy_loss', './assets/sfx/enemy_loss.wav');
+	mainScene.load.audio('player_death', './assets/sfx/player_death.wav');
+	mainScene.load.audio('player_loss', './assets/sfx/player_loss.wav');
+	mainScene.load.audio('wing_flap', './assets/sfx/wing_flap.wav');
+	
+
 }
 
 function create ()
@@ -65,7 +98,7 @@ function create ()
 	gameTime = new Timer();
 	
 	var background = mainScene.add.image(0, 0, 'background').setOrigin(0, 0).setScale(0.48);
-	//
+	// background.setTint('0xff0000');
 
 	platforms = mainScene.physics.add.staticGroup();
 	lavaPlatforms = mainScene.physics.add.staticGroup();
@@ -131,6 +164,13 @@ function create ()
 	});
 
 	mainScene.anims.create({
+		key: 'hero_flap',
+		frames: mainScene.anims.generateFrameNumbers('hero_on_mount', {frames: [3, 2, 1, 0]}),
+		frameRate: 30,
+		repeat: 0
+	});
+
+	mainScene.anims.create({
 		key: 'queen_flap',
 		frames: mainScene.anims.generateFrameNumbers('queen', {frames: [0,1,2]}),
 		frameRate: 10,
@@ -158,34 +198,36 @@ function create ()
 	mainScene.physics.add.collider(player, lava, hitLava, null, this);
 	mainScene.physics.add.collider(player, pterodactyls, hitPterodactyl, null, this);
 	mainScene.physics.add.collider(eggs, mounts, riderMount, null, this);
-	
-	// mainScene.physics.add.collider(enemies, enemies);
 	mainScene.physics.add.overlap(player, mounts, hitMount, null, this);
-	// mainScene.physics.add.collider(enemies, mounts);
 
 	peCollision = mainScene.physics.add.overlap(player, enemies, hitEnemy, null, this);
-	mainScene.physics.add.overlap(player, eggs, killEgg, null, this);
+	prCollision = mainScene.physics.add.overlap(player, eggs, killEgg, null, this);
 
 	mainScene.physics.pause();
 
-	scoreText = mainScene.add.text(16, 16, 'Score: 0', {fontSize: '32px', fill: '#000'});
-	livesText = mainScene.add.text(800 - 400, 16, 'Lives Remaining: ' + PLAYER_MAX_LIVES, {fontSize: '32px', fill: '#000'});
-	menuText = mainScene.add.text(400, 400, 'SLAY\nHit Up Arrow to Start', {fontSize: '32px', fill: '#000'});
-	waveText = mainScene.add.text(300, 300, '', {fontSize: '32px', fill: '#000'});
+	// Put all font images on screen including text, lives, waves etc.
+	initializeFontManager();
+	
+	// Initialize audio
+	music = this.sound.add('bg_music');
+	music.setLoop(true);
+	music.play();
+	
 }
 
 function update ()
 {
 	gameTime.update();
-	//console.log(gameTime.getDeltaTime());
+	
 	cursors = mainScene.input.keyboard.createCursorKeys();
 	var rObj = mainScene.input.keyboard.addKey('R');
 	spaceObj = mainScene.input.keyboard.addKey('SPACE');
 
 	//Game State Machine
 	if(gState === GAMESTATE.s_menu){
-		if(cursors.up.isDown){
-			menuText.setText('');
+		if(spaceObj.isDown){
+			menuText.setVisible(false);
+			startInstructions.setVisible(false);
 			gState = GAMESTATE.s_play;
 			mainScene.physics.resume();
 		}
@@ -193,6 +235,8 @@ function update ()
 	else if(gState === GAMESTATE.s_play){
 		if(gameOver){
 			gState = GAMESTATE.s_gameOver;
+			restartInstructions.setVisible(true);
+			music.pause();
 		}
 		else{
 			gameUpdate();
@@ -201,6 +245,7 @@ function update ()
 	else if(gState === GAMESTATE.s_gameOver){
 		if(rObj.isDown){
 			mainScene.scene.restart();
+			restartInstructions.setVisible(false);
 			score = 0;
 			pLogic.playerLives = PLAYER_MAX_LIVES;
 			gState = GAMESTATE.s_menu;

@@ -19,6 +19,9 @@ const PTERODACTYL_SPAWN_TIME = 8000; //ms
 const SPAWN_LOCATION_X = [350, 400, 1400, 1450];
 const SPAWN_LOCATION_Y = [150, 700, 700, 150];
 
+const ENEMY_IFRAMES = 2000; //ms
+const PLAYER_IFRAMES = 2000; //ms
+
 var waveNumber = 0;
 var t_waveDisplay = 0;
 var b_waveDisplayRunning = false;
@@ -36,8 +39,17 @@ var t_playerSafetyFlash = 0;
 var b_FlashTintEnabled = false;
 var t_pterodactylTimer = 0;
 var b_pterodactylTimerRunning = false;
+var t_enemyIframes = 0;
+var b_enemyIframesRunning = false;
+var t_playerIframes = 0;
+var b_playerIframesRunning = false;
+
+
 
 function gameUpdate(){
+	// Update the font manager
+	updateScoreText();
+	
     //wave display timer
     //  start timer if no enemies or eggs exist
     //  display text while timer is running
@@ -55,15 +67,22 @@ function gameUpdate(){
 				lavaPlatforms.clear(true, true);
 			}
         }
+        else if(enemies.countActive() === 0 && mounts.countActive() === 0 && eggs.countActive() != 0 && pLogic.mount == -1){
+            //spawn a mount
+            let _m = new Mount(SPAWN_LOCATION_X[0], SPAWN_LOCATION_Y[0], 0);
+            mounts.add(_m, true);
+            _m.setPhysics();
+        }
     }
 
     if(t_waveDisplay > 0){
-        waveText.setText('Wave ' + waveNumber);
+		
+        enableWaveText();
         t_waveDisplay -= gameTime.getDeltaTime();
         if(t_waveDisplay <= 0){
             t_waveDisplay = 0;
             b_waveDisplayRunning = false;
-            waveText.setText('');
+            disableWaveText();
             t_enemySpawn = ENEMY_SPAWN_TIME;
             b_enemySpawnRunning = true;
 			t_pterodactylTimer = PTERODACTYL_SPAWN_TIME;
@@ -223,6 +242,29 @@ function gameUpdate(){
 			}
 		}
 	}
+
+    if(b_enemyIframesRunning){
+        prCollision.active = false;
+        t_enemyIframes -= gameTime.getDeltaTime();
+        if(t_enemyIframes <= 0){
+            prCollision.active = true;
+            t_enemyIframes = 0;
+            b_enemyIframesRunning = false;
+        }
+    }
+
+    if(b_playerIframesRunning){
+        peCollision.active = false;
+        t_playerIframes -= gameTime.getDeltaTime();
+        if(t_playerIframes <= 0){
+            peCollision.active = true;
+            t_playerIframes = 0;
+            b_playerIframesRunning = false;
+        }
+    }
+
+
+
 
     if(!b_playerDeathPauseRunning && !b_playerSpawnRunning){
         pLogic.playerMove(player, cursors);

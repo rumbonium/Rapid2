@@ -14,8 +14,10 @@ function hitEnemy(player, enemy) {
 			egg.body.setVelocity(enemy.body.velocity.x, enemy.body.velocity.y);
 
 			pLogic.mount = enemy.difficulty;
-			player.setTexture('rider_on_mount');
+			player.setTexture('hero_on_mount');
 
+			b_enemyIframesRunning = true;
+			t_enemyIframes = ENEMY_IFRAMES;
 			enemy.kill();
 		}
 		else{
@@ -28,16 +30,23 @@ function hitEnemy(player, enemy) {
 		if (diff > ENEMY_COLLISION_DEAD_ZONE_SIZE) {
 			//  replace this with player losing mount
 			pLogic.mount = -1;
+			b_playerIframesRunning = true;
+			t_playerIframes = PLAYER_IFRAMES;
 			player.setTexture('hero_stand');
+			player.body.position.y -= 20;
 		}
 	
 		else if (diff < -ENEMY_COLLISION_DEAD_ZONE_SIZE) {
 			//Create an egg, give it velocity
+			let egg = new Egg(enemy.getCenter().x+30, enemy.getCenter().y, enemy.difficulty);
+			eggs.add(egg, true);
+			egg.setPhysics();
+			egg.body.setVelocity(enemy.body.velocity.x, enemy.body.velocity.y);
 			
+			b_enemyIframesRunning = true;
+			t_enemyIframes = ENEMY_IFRAMES;
+
 			enemy.kill();
-	
-			score += ENEMY_SCORES[enemy.difficulty];
-			scoreText.setText('Score: ' + score);
 		}
 		else {
 			// Player on right
@@ -64,7 +73,6 @@ function hitPterodactyl(player, pterodactyl) {
 	
 	if (Math.abs(diff) < ENEMY_COLLISION_DEAD_ZONE_SIZE) {
 		score += PTERODACTYL_SCORE;
-		scoreText.setText('Score: ' + score);
 		
 		pterodactyl.kill();
 	}
@@ -81,22 +89,21 @@ function destroy(toDestroy, other) {
 
 function killEgg(player, egg) {
 	if(pLogic.mount != -1){
-		score += EGG_SCORES[eggCounter];
-		eggCounter = (eggCounter >= 3) ? 3 : eggCounter + 1;
-		scoreText.setText('Score: ' + score);
+		score += ENEMY_SCORES[egg.difficulty];
 		egg.kill();
 	}
 }
 
 function setGameOver(){
+	mainScene.sound.play('player_loss');
 	mainScene.physics.pause();
 	player.setTintFill(0xff0000);
 	player.anims.play('turn');
 	gameOver = true;
-	scoreText.setText('Score: ' + score + '\nHit R to restart');
 }
 
 function playerDamage(){
+	mainScene.sound.play('player_death');
 	if (pLogic.mount>0) {
 		// TODO: Create a new mount
 		
@@ -109,6 +116,7 @@ function playerDamage(){
 	else{
 		b_playerIsDamaged = true;
 		player.setTintFill(0xff0000);
+		player.setTexture('hero_stand');
 		
 		// Kill all active pterodactyls
 		pterodactyls.children.each(pterodactyl => pterodactyl.kill());
@@ -125,7 +133,7 @@ function hitMount(player, mount){
 		if(player.body.y < mount.body.y - mount.body.halfHeight && player.body.velocity.y > 0){
 			pLogic.mount = mount.level;
 			mount.kill();
-			player.setTexture('rider_on_mount');
+			player.setTexture('hero_on_mount');
 			player.setSize(player.displayWidth*2, player.displayHeight*2);
 		}
 	}
