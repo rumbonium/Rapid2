@@ -8,6 +8,8 @@ var menuText;
 
 var waveTextImage;
 var waveNumberImage;
+var startInstructions;
+var restartInstructions;
 
 
 var scoreFlashing = false;
@@ -16,15 +18,19 @@ const SCORE_FLASH_TIME = 2; // seconds that the score flashes after getting poin
 const FLASH_DELAY = 0.25; // seconds that the text stays red
 
 function initializeFontManager() {
-	scoreTextImage = mainScene.add.image(16, 16, 'font_score').setOrigin(0,0);
+	scoreTextImage = mainScene.add.image(690, 16, 'font_score').setOrigin(0,0).setScale(1.5, 1.5);;
 	for (let i = 0; i<6; i++)
-		scoreNumberImages.push(mainScene.add.image(100+i*16, 16, 'font_0').setOrigin(0,0));
+		scoreNumberImages.push(mainScene.add.image(795+i*16, 16, 'font_0').setOrigin(0,0).setScale(1.5, 1.5));
 	
-	livesTextImage = mainScene.add.image(14, 60, 'font_lives').setOrigin(0,0);
-	livesNumberImage = mainScene.add.image(100, 60, 'font_' + pLogic.playerLives).setOrigin(0,0);
+	livesTextImage = mainScene.add.image(980, 16, 'font_lives').setOrigin(0,0).setScale(1.5, 1.5);;
+	livesNumberImage = mainScene.add.image(1080, 16, 'font_' + pLogic.playerLives).setOrigin(0,0).setScale(1.5, 1.5);
+	livesNumberImage.setTintFill(0xff0000);
 
 
-	menuText = mainScene.add.text(400, 400, 'SLAY\nHit Up Arrow to Start', {fontSize: '32px', fill: '#000'});
+	menuText = mainScene.add.image(640, 100, 'font_logo').setOrigin(0,0).setScale(1.5, 1.5);
+	startInstructions = mainScene.add.image(700, 360, 'font_start').setOrigin(0,0).setScale(1.5,1.5);
+	restartInstructions = mainScene.add.image(700, 360, 'font_restart').setOrigin(0,0).setScale(1.5, 1.5);
+	restartInstructions.setVisible(false);
 	waveTextImage = mainScene.add.image(820, 400, 'font_waves').setOrigin(0,0).setScale(1.5, 1.5);
 	waveNumberImage = mainScene.add.image(940, 400, 'font_0').setOrigin(0,0).setScale(1.5, 1.5);
 
@@ -33,6 +39,7 @@ function initializeFontManager() {
 
 function updateLivesText() {
 	livesNumberImage.setTexture('font_' + pLogic.playerLives);
+	livesNumberImage.setTintFill(0xff0000);
 }
 
 // last recorded score - required so that we don't load images EVERY Frame
@@ -42,7 +49,7 @@ function updateScoreText() {
 		// if this is the first time, set the text to red
 		if (scoreFlashTime == 0) {
 			for (const p of scoreNumberImages)
-				p.setTintFill(0xff0000);
+				p.setTintFill(0x0000ff);
 		}
 
 		scoreFlashTime += gameTime.getDeltaTimeSeconds();
@@ -51,7 +58,8 @@ function updateScoreText() {
 			scoreFlashing = false;
 			
 			for (const p of scoreNumberImages)
-				p.clearTint();
+				// p.clearTint();
+				p.setTintFill(0xff0000);
 		}
 		
 		

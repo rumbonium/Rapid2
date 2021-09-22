@@ -6,7 +6,7 @@ var config = {
 		default: 'arcade',
 		arcade: {
 			gravity: {y: 300},
-			debug: true,
+			debug: false,
 			debugShowBody: true,
 			debugShowVelocity: true,
 			debugVelocityColor: 0xffff00,
@@ -64,6 +64,9 @@ function preload ()
 	mainScene.load.image('font_lives', './assets/fonts/lives.png');
 	mainScene.load.image('font_score', './assets/fonts/score.png');
 	mainScene.load.image('font_waves', './assets/fonts/wave.png');
+	mainScene.load.image('font_start', './assets/fonts/Slay_spacebar_instructions.png');
+	mainScene.load.image('font_restart', './assets/fonts/Slay_restart_instructions.png');
+	mainScene.load.image('font_logo', './assets/fonts/Slay_logo.png');
 	
 	
 	// Load SFX
@@ -209,8 +212,9 @@ function update ()
 
 	//Game State Machine
 	if(gState === GAMESTATE.s_menu){
-		if(cursors.up.isDown){
-			menuText.setText('');
+		if(spaceObj.isDown){
+			menuText.setVisible(false);
+			startInstructions.setVisible(false);
 			gState = GAMESTATE.s_play;
 			mainScene.physics.resume();
 		}
@@ -218,6 +222,7 @@ function update ()
 	else if(gState === GAMESTATE.s_play){
 		if(gameOver){
 			gState = GAMESTATE.s_gameOver;
+			restartInstructions.setVisible(true);
 		}
 		else{
 			gameUpdate();
@@ -226,6 +231,7 @@ function update ()
 	else if(gState === GAMESTATE.s_gameOver){
 		if(rObj.isDown){
 			mainScene.scene.restart();
+			restartInstructions.setVisible(false);
 			score = 0;
 			pLogic.playerLives = PLAYER_MAX_LIVES;
 			gState = GAMESTATE.s_menu;
