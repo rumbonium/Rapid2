@@ -21,9 +21,9 @@ var config = {
 };
 
 let myVideo = document.getElementById("video");
-setTimeout(begin, 33000);
+setTimeout(begin, 33500);
+myVideo.muted = true;
 myVideo.play();
-
 
 
 var mainScene;
