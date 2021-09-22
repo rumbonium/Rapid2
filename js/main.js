@@ -22,7 +22,7 @@ var config = {
 
 let myVideo = document.getElementById("video");
 setTimeout(begin, 33500);
-myVideo.muted = true;
+
 myVideo.play();
 
 
