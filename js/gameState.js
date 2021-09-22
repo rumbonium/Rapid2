@@ -67,6 +67,12 @@ function gameUpdate(){
 				lavaPlatforms.clear(true, true);
 			}
         }
+        else if(enemies.countActive() === 0 && mounts.countActive() === 0 && eggs.countActive() != 0 && pLogic.mount == -1){
+            //spawn a mount
+            let _m = new Mount(SPAWN_LOCATION_X[0], SPAWN_LOCATION_Y[0], 0);
+            mounts.add(_m, true);
+            _m.setPhysics();
+        }
     }
 
     if(t_waveDisplay > 0){
@@ -256,6 +262,9 @@ function gameUpdate(){
             b_playerIframesRunning = false;
         }
     }
+
+
+
 
     if(!b_playerDeathPauseRunning && !b_playerSpawnRunning){
         pLogic.playerMove(player, cursors);

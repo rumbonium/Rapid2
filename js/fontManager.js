@@ -1,5 +1,5 @@
 var scoreTextImage;
-var scoreNumberImages = [];
+var scoreNumberImages;
 
 var livesTextImage;
 var livesNumberImage;
@@ -18,6 +18,7 @@ const SCORE_FLASH_TIME = 2; // seconds that the score flashes after getting poin
 const FLASH_DELAY = 0.25; // seconds that the text stays red
 
 function initializeFontManager() {
+	scoreNumberImages = [];
 	scoreTextImage = mainScene.add.image(690, 16, 'font_score').setOrigin(0,0).setScale(1.5, 1.5);;
 	for (let i = 0; i<6; i++)
 		scoreNumberImages.push(mainScene.add.image(795+i*16, 16, 'font_0').setOrigin(0,0).setScale(1.5, 1.5));

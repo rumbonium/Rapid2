@@ -73,7 +73,6 @@ function hitPterodactyl(player, pterodactyl) {
 	
 	if (Math.abs(diff) < ENEMY_COLLISION_DEAD_ZONE_SIZE) {
 		score += PTERODACTYL_SCORE;
-		scoreText.setText('Score: ' + score);
 		
 		pterodactyl.kill();
 	}

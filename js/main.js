@@ -40,7 +40,7 @@ var eggs;
 var eggCounter = 0;
 var gameOver = false;
 var game = new Phaser.Game(config);
-
+var music;
 function preload ()
 {
 	mainScene = this;
@@ -196,7 +196,7 @@ function create ()
 	initializeFontManager();
 	
 	// Initialize audio
-	var music = this.sound.add('bg_music');
+	music = this.sound.add('bg_music');
 	music.setLoop(true);
 	music.play();
 	
@@ -223,6 +223,7 @@ function update ()
 		if(gameOver){
 			gState = GAMESTATE.s_gameOver;
 			restartInstructions.setVisible(true);
+			music.pause();
 		}
 		else{
 			gameUpdate();
