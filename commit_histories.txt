@@ -1,0 +1,390 @@
+Merge: bd2b3a7 332a641
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Wed Sep 22 17:33:05 2021 -0600
+
+    Merge pull request #62 from rumbonium/Hyrum-Dev
+    
+    Final Presentation Ready
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Wed Sep 22 17:32:30 2021 -0600
+
+    unmuted video
+
+Merge: e2ce47f 6e67c4c
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Wed Sep 22 17:28:53 2021 -0600
+
+    Merge branch 'kayle_video-demo' into Hyrum-Dev
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Wed Sep 22 17:25:14 2021 -0600
+
+    Fixed Vampire queen kill bug
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Wed Sep 22 16:11:28 2021 -0600
+
+    Prettied up the start screen
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Wed Sep 22 15:05:36 2021 -0600
+
+    New video with better resolution
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Tue Sep 21 13:25:19 2021 -0600
+
+    video before game
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Tue Sep 21 12:36:22 2021 -0600
+
+    Score flashes
+
+Merge: 62fb4ab 600f2f4
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Tue Sep 21 12:09:41 2021 -0600
+
+    Merge branch 'Kayle-dev' into Hyrum-Dev
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Tue Sep 21 12:06:19 2021 -0600
+
+    font manager for image based fonts, closes #55
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Tue Sep 21 12:04:34 2021 -0600
+
+    Added hero animations
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Tue Sep 21 10:59:09 2021 -0600
+
+    Added player/enemy I-Frames after collision
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Tue Sep 21 10:32:04 2021 -0600
+
+    Add fonts
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Tue Sep 21 10:31:06 2021 -0600
+
+    Add audio, closes #56
+
+Merge: 75b8b1a 2862e38
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Tue Sep 21 10:06:43 2021 -0600
+
+    Merge branch 'Kayle-dev' into Hyrum-Dev
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Tue Sep 21 10:06:21 2021 -0600
+
+    Changed enemy update rate
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Tue Sep 21 09:59:47 2021 -0600
+
+    Hero Flap animation
+
+Author: KBHeid <kbheid@live.com>
+Date:   Mon Sep 20 21:17:48 2021 -0600
+
+    Flip enemies when they move other direction
+
+Author: KBHeid <kbheid@live.com>
+Date:   Mon Sep 20 19:25:57 2021 -0600
+
+    Code cleanup - enemies fly better. Closes #51
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Mon Sep 20 18:15:01 2021 -0600
+
+    Increased mount speed when there is no rider
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Mon Sep 20 17:34:03 2021 -0600
+
+    Update collision.js
+
+Merge: 62db426 3ca9f66
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Mon Sep 20 13:39:53 2021 -0600
+
+    Merge pull request #54 from rumbonium/Kayle-Dev2
+    
+    Kayle dev2
+
+Merge: 2da172c 62db426
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Mon Sep 20 13:37:58 2021 -0600
+
+    Merge branch 'master' of https://github.com/rumbonium/Rapid2 into Hyrum-dev
+
+Merge: 3595ce7 54103a4
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Mon Sep 20 13:37:13 2021 -0600
+
+    Merge pull request #53 from rumbonium/Hyrum-Dev
+    
+    Hyrum dev
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Mon Sep 20 13:35:36 2021 -0600
+
+    only kill rider if mounted
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Mon Sep 20 13:34:48 2021 -0600
+
+    Fix queen and enemy not moving, Closes #49
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Mon Sep 20 12:42:07 2021 -0600
+
+    Built Arena, removed vampire queen-platform collider
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Mon Sep 20 12:15:08 2021 -0600
+
+    Added Player jump off mount, player land on mount to acquire, player jump on mounted enemy to hijack, hijack spawns mount-less enemy, mount-less enemy and empty mount collide to form mounted enemy, added hero and queen art assets
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Sat Sep 18 14:12:17 2021 -0600
+
+    Added dismount and mounting (dismount when you jump while on a mount, mount when you jump onto an empty mount)
+
+Merge: 2efc99a 9703c44
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Fri Sep 17 14:28:25 2021 -0600
+
+    Merge branch 'Kayle-dev' into Hyrum-Dev
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Fri Sep 17 14:27:56 2021 -0600
+
+    Created flat arena for hijack testing
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Thu Sep 16 13:06:44 2021 -0600
+
+    Closes #9
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Thu Sep 16 12:48:07 2021 -0600
+
+    Fix for enemy sprite size
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Thu Sep 16 12:40:22 2021 -0600
+
+    Initial art assets add
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Thu Sep 16 12:01:48 2021 -0600
+
+    Jump logic
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Thu Sep 16 11:49:07 2021 -0600
+
+    Fixed pterodactyl leaving screen
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Thu Sep 16 11:29:45 2021 -0600
+
+    Egg fix
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Thu Sep 16 10:11:17 2021 -0600
+
+    update file name too - stupid git
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Thu Sep 16 10:09:39 2021 -0600
+
+    Player.js->player.js
+
+Author: KBHeid <kbheid@live.com>
+Date:   Wed Sep 15 23:44:44 2021 -0600
+
+    Adds 'burnable' platforms
+
+Author: KBHeid <kbheid@live.com>
+Date:   Wed Sep 15 23:44:28 2021 -0600
+
+    Closes #14, adds pterodactyls
+
+Merge: 4b5a6f2 ce838de
+Author: Kayle <31446092+KBheid@users.noreply.github.com>
+Date:   Wed Sep 15 20:48:16 2021 -0600
+
+    Merge pull request #37 from rumbonium/Hyrum-Dev
+    
+    Hyrum dev into Master
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Wed Sep 15 14:54:41 2021 -0600
+
+    added game state machine, added player spawning, temporary invincibility, enemy spawning, waves
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Tue Sep 14 15:34:00 2021 -0600
+
+    Player Lives
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Tue Sep 14 14:52:27 2021 -0600
+
+    Enemy and Egg scoring
+
+Merge: e3a99a7 54a6281
+Author: saholdmeyer <90716299+saholdmeyer@users.noreply.github.com>
+Date:   Tue Sep 14 13:01:27 2021 -0600
+
+    Merge pull request #26 from rumbonium/KBheid-patch-1
+    
+    Create README.md
+
+Author: Kayle <31446092+KBheid@users.noreply.github.com>
+Date:   Tue Sep 14 13:00:02 2021 -0600
+
+    Create README.md
+
+Merge: da9327b 4a83f20
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Tue Sep 14 12:53:36 2021 -0600
+
+    Merge pull request #25 from rumbonium/Hyrum-Dev
+    
+    First Playable for Team
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Tue Sep 14 12:52:31 2021 -0600
+
+    First Playable
+
+Merge: 511c67d 26ae8e4
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Tue Sep 14 12:39:02 2021 -0600
+
+    Merge remote-tracking branch 'origin/Kayle-dev' into Hyrum-Dev
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Tue Sep 14 12:35:40 2021 -0600
+
+    Enemy Tints and scores
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Tue Sep 14 12:15:11 2021 -0600
+
+    Killable eggs
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Tue Sep 14 12:04:51 2021 -0600
+
+    Cleanup main
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Tue Sep 14 12:04:02 2021 -0600
+
+    Closes #16, enemies spawn from eggs
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Tue Sep 14 12:03:40 2021 -0600
+
+    Timer class
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Tue Sep 14 09:09:13 2021 -0600
+
+    Moved Player file to 'js' directory
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Tue Sep 14 09:07:18 2021 -0600
+
+    Reduce dead zone on collision
+
+Merge: 5231d86 da9327b
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Tue Sep 14 09:01:01 2021 -0600
+
+    Merge pull request #19 from rumbonium/master
+    
+    Merging Kayle's work
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Tue Sep 14 09:00:38 2021 -0600
+
+    Move platforms, closes #10
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Mon Sep 13 13:27:23 2021 -0600
+
+    Closes #18, player-enemy collision no longer kills either
+
+Merge: 21d870e 5231d86
+Author: KBHeid <kbheid@live.com>
+Date:   Sun Sep 12 23:08:34 2021 -0600
+
+    Enemy AI
+
+Author: KBHeid <kbheid@live.com>
+Date:   Sun Sep 12 13:52:56 2021 -0600
+
+    Changes before merge
+
+Author: KBHeid <kbheid@live.com>
+Date:   Sun Sep 12 11:13:15 2021 -0600
+
+    Closes #5, #1
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Sat Sep 11 16:02:11 2021 -0600
+
+    Added Player file to store player functionality, added lava
+
+Merge: d4fa4cd c2cbe19
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Fri Sep 10 18:16:24 2021 -0600
+
+    Merge pull request #2 from rumbonium/Hyrum-Dev
+    
+    Hyrum dev into Master
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Fri Sep 10 18:15:27 2021 -0600
+
+    Created some 'Joust' Mechanics
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Fri Sep 10 17:07:52 2021 -0600
+
+    Structure cleanup
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Fri Sep 10 16:57:35 2021 -0600
+
+    Add gitignore, add run.bat
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Fri Sep 10 16:49:47 2021 -0600
+
+    Add python server file
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Fri Sep 10 16:24:05 2021 -0600
+
+    Changed URL to local lib
+
+Author: Hyrum Gunther <hygunth@gmail.com>
+Date:   Fri Sep 10 16:17:59 2021 -0600
+
+    Hyrum Tutorial Game
+
+Author: KAYLE HEIDEMAN <u1344892@ad.utah.edu>
+Date:   Fri Sep 10 16:07:10 2021 -0600
+
+    Initial Commit

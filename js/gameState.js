@@ -218,11 +218,6 @@ function gameUpdate(){
 	//  timer runs only once
 	//  the timer enables itself if there are no current pterodactyls
 	
-	if (pterodactyls.countActive() === 0 && b_pterodactylTimerRunning) {
-		b_pterodactylTimerRunning = true;
-		b_pterodactylTimer = PTERODACTYL_SPAWN_TIME;
-	}
-	
 	if (b_pterodactylTimerRunning) {
 		t_pterodactylTimer -= gameTime.getDeltaTime();
 		if (t_pterodactylTimer <= 0) {
